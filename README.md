@@ -7,9 +7,8 @@
 - [3. Objetivos de aprendizaje](#3-objetivos-de-aprendizaje)
 - [4. Consideraciones generales](#4-consideraciones-generales)
 - [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptaci%C3%B3n-m%C3%ADnimos-del-proyecto)
-- [6. Evaluación](#6-evaluaci%C3%B3n)
-- [7. Pistas, tips y lecturas complementarias](#7-pistas-tips-y-lecturas-complementarias)
-- [8 HTTP API Checklist](#8-http-api-checklist)
+- [6. Pistas, tips y lecturas complementarias](#6-pistas-tips-y-lecturas-complementarias)
+- [7 HTTP API Checklist](#7-http-api-checklist)
 
 ## 1. Preámbulo
 
