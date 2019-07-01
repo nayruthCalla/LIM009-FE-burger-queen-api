@@ -51,7 +51,11 @@ module.exports = (app, nextMain) => {
    * @name POST /products
    * @description Crea un nuevo producto
    * @path {POST} /products
-   * @auth Requiere `token` de autenticación y que el usuario sea **admin**
+   * @auth Requiere `token` de autenticación y que la usuaria sea **admin**
+   * @body {String} name Nombre
+   * @body {Number} price Precio
+   * @body {String} [imagen]  URL a la imagen
+   * @body {String} [type] Tipo/Categoría
    * @response {Object} product
    * @response {String} product.name Nombre
    * @response {String} product.price Precio
