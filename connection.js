@@ -8,7 +8,7 @@ module.exports = async (dbUrl) => {
     const db = client.db(dbName);
     return db;
   } catch (err) {
-    console.log(err.stack);
+    // console.log(err.stack);
   }
   client.close();
 };
