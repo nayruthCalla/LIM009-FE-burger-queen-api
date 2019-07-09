@@ -13,6 +13,7 @@ module.exports = (app, nextMain) => {
    * @query {String} [limit=10] Cantitad de elementos por página
    * @auth Requiere `token` de autenticación
    * @response {Array} products
+   * @response {String} products[]._id Id
    * @response {String} products[].name Nombre
    * @response {String} products[].price Precio
    * @response {URL} products[].image URL a la imagen
@@ -35,6 +36,7 @@ module.exports = (app, nextMain) => {
    * @body {String} [type=undefined] Tipo/Categoría
    * @auth Requiere `token` de autenticación
    * @response {Object} product
+   * @response {String} product._id Id
    * @response {String} product.name Nombre
    * @response {String} product.price Precio
    * @response {URL} product.image URL a la imagen
@@ -57,6 +59,7 @@ module.exports = (app, nextMain) => {
    * @body {String} [imagen]  URL a la imagen
    * @body {String} [type] Tipo/Categoría
    * @response {Object} product
+   * @response {String} products._id Id
    * @response {String} product.name Nombre
    * @response {String} product.price Precio
    * @response {URL} product.image URL a la imagen
@@ -83,6 +86,7 @@ module.exports = (app, nextMain) => {
    * @body {String} [imagen]  URL a la imagen
    * @body {String} [type] Tipo/Categoría
    * @response {Object} product
+   * @response {String} product._id Id
    * @response {String} product.name Nombre
    * @response {String} product.price Precio
    * @response {URL} product.image URL a la imagen
@@ -104,6 +108,7 @@ module.exports = (app, nextMain) => {
    * @params {String} :productId `id` del producto
    * @auth Requiere `token` de autenticación y que el usuario sea **admin**
    * @response {Object} product
+   * @response {String} product._id Id
    * @response {String} product.name Nombre
    * @response {String} product.price Precio
    * @response {URL} product.image URL a la imagen

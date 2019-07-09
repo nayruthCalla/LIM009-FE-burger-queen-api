@@ -15,7 +15,6 @@ module.exports = (app, nextMain) => {
    * @body {String} password Contraseña
    * @response {String} token Token a usar para los requests sucesivos
    * @code {200} si la autenticación es correcta
-   * @code {401} si cabecera de autenticación no está presente
    * @code {400} si no se proveen `email` o `password` o ninguno de los dos
    * @auth No requiere autenticación
    */

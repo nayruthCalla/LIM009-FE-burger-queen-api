@@ -12,6 +12,7 @@ module.exports = (app, nextMain) => {
    * @query {String} [limit=10] Cantitad de elementos por página
    * @auth Requiere `token` de autenticación
    * @response {Array} orders
+   * @response {String} orders[]._id Id
    * @response {String} orders[].userId Id usuaria que creó la orden
    * @response {String} orders[].client Clienta para quien se creó la orden
    * @response {Array} orders[].products Productos
@@ -20,7 +21,7 @@ module.exports = (app, nextMain) => {
    * @response {Object} orders[].products[].product Producto
    * @response {String} orders[].status Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Date} orders[].dateEntry Fecha de creación
-   * @response {Date} orders[].dateProcessed Fecha de cambio de `status` a `delivered`
+   * @response {Date} [orders[].dateProcessed] Fecha de cambio de `status` a `delivered`
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    */
@@ -34,6 +35,7 @@ module.exports = (app, nextMain) => {
    * @params {String} :orderId `id` de la orden a consultar
    * @auth Requiere `token` de autenticación
    * @response {Object} order
+   * @response {String} order._id Id
    * @response {String} order.userId Id usuaria que creó la orden
    * @response {String} order.client Clienta para quien se creó la orden
    * @response {Array} order.products Productos
@@ -42,7 +44,7 @@ module.exports = (app, nextMain) => {
    * @response {Object} order.products[].product Producto
    * @response {String} order.status Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Date} order.dateEntry Fecha de creación
-   * @response {Date} order.dateProcessed Fecha de cambio de `status` a `delivered`
+   * @response {Date} [order.dateProcessed] Fecha de cambio de `status` a `delivered`
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si la orden con `orderId` indicado no existe
@@ -62,6 +64,7 @@ module.exports = (app, nextMain) => {
    * @body {String} products[].productId Id de un producto
    * @body {Number} products[].qty Cantidad de ese producto en la orden
    * @response {Object} order
+   * @response {String} order._id Id
    * @response {String} order.userId Id usuaria que creó la orden
    * @response {String} order.client Clienta para quien se creó la orden
    * @response {Array} order.products Productos
@@ -70,7 +73,7 @@ module.exports = (app, nextMain) => {
    * @response {Object} order.products[].product Producto
    * @response {String} order.status Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Date} order.dateEntry Fecha de creación
-   * @response {Date} order.dateProcessed Fecha de cambio de `status` a `delivered`
+   * @response {Date} [order.dateProcessed] Fecha de cambio de `status` a `delivered`
    * @code {200} si la autenticación es correcta
    * @code {400} no se indica `userId` o se intenta crear una orden sin productos
    * @code {401} si no hay cabecera de autenticación
@@ -92,6 +95,7 @@ module.exports = (app, nextMain) => {
    * @body {Number} products[].qty Cantidad de ese producto en la orden
    * @body {String} [status] Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Object} order
+   * @response {String} order._id Id
    * @response {String} order.userId Id usuaria que creó la orden
    * @response {Array} order.products Productos
    * @response {Object} order.products[] Producto
@@ -99,7 +103,7 @@ module.exports = (app, nextMain) => {
    * @response {Object} order.products[].product Producto
    * @response {String} order.status Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Date} order.dateEntry Fecha de creación
-   * @response {Date} order.dateProcessed Fecha de cambio de `status` a `delivered`
+   * @response {Date} [order.dateProcessed] Fecha de cambio de `status` a `delivered`
    * @code {200} si la autenticación es correcta
    * @code {400} si no se indican ninguna propiedad a modificar o la propiedad `status` no es valida
    * @code {401} si no hay cabecera de autenticación
@@ -115,6 +119,7 @@ module.exports = (app, nextMain) => {
    * @params {String} :orderId `id` del producto
    * @auth Requiere `token` de autenticación
    * @response {Object} order
+   * @response {String} order._id Id
    * @response {String} order.userId Id usuaria que creó la orden
    * @response {String} order.client Clienta para quien se creó la orden
    * @response {Array} order.products Productos
@@ -123,7 +128,7 @@ module.exports = (app, nextMain) => {
    * @response {Object} order.products[].product Producto
    * @response {String} order.status Estado: `pending`, `canceled`, `delivering` o `delivered`
    * @response {Date} order.dateEntry Fecha de creación
-   * @response {Date} order.dateProcessed Fecha de cambio de `status` a `delivered`
+   * @response {Date} [order.dateProcessed] Fecha de cambio de `status` a `delivered`
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si el producto con `orderId` indicado no existe
