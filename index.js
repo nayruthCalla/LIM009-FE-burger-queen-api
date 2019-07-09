@@ -29,7 +29,6 @@ db(dbUrl)
       }
       app.use(errorHandler);
     });
-
     app.listen(port, () => {
       console.info(`App listening on port ${port}`);
     });
