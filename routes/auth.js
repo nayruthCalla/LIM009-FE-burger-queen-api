@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const config = require('../config');
 const db = require('../services/connection');
 const { dbUrl } = require('../config');
@@ -30,7 +29,7 @@ module.exports = (app, nextMain) => {
     db(dbUrl)
       .then((db) => {
         const query = { email };
-        db.collection('user').findOne(query).then((user) => {
+        db.collection('users').findOne(query).then((user) => {
           if (!user) {
             resp.send({ success: true, message: 'authentication failed. User not found' });
           } else if (user) {
@@ -39,6 +38,7 @@ module.exports = (app, nextMain) => {
             } else {
               const token = tokens(user, secret);
               resp.json({ success: true, message: 'Enjoy your token', token });
+              return next();
             }
           }
         });
