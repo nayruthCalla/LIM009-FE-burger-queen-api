@@ -23,8 +23,11 @@ module.exports = (app, nextMain) => {
     if (!email || !password) {
       return next(400);
     }
-
     // TODO: autenticar a la usuarix
+    jwt.sign({ email }, secret, (err, token) => {
+      resp.json({ token });
+      return next(200);
+    });
   });
 
   return nextMain();
