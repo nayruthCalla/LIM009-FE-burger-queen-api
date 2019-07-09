@@ -4,7 +4,7 @@ const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('./package.json');
-const db = require('./connection');
+const db = require('./services/connection');
 
 const { port, dbUrl, secret } = config;
 const app = express();

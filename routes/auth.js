@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const db = require('../services/connection');
+const { dbUrl } = require('../config');
+const tokens = require('../services/tokens');
 
 const { secret } = config;
 
@@ -24,11 +27,25 @@ module.exports = (app, nextMain) => {
       return next(400);
     }
     // TODO: autenticar a la usuarix
-    jwt.sign({ email }, secret, (err, token) => {
-      resp.json({ token });
-      return next(200);
-    });
+    db(dbUrl)
+      .then((db) => {
+        const query = { email };
+        db.collection('user').findOne(query).then((user) => {
+          if (!user) {
+            resp.send({ success: true, message: 'authentication failed. User not found' });
+          } else if (user) {
+            if (user.password !== password) {
+              resp.json({ success: false, message: 'authentication failed. Wrong password' });
+            } else {
+              const token = tokens(user, secret);
+              resp.json({ success: true, message: 'Enjoy your token', token });
+            }
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
-  // HolaAAAAAAAAAAAAAAAA
   return nextMain();
 };
