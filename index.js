@@ -33,4 +33,6 @@ db(dbUrl)
     app.listen(port, () => {
       console.info(`App listening on port ${port}`);
     });
+    // const pkg = app.get('pkg');
+    app.get('/', (req, res) => res.json({ name: pkg.name, version: pkg.version }));
   });
