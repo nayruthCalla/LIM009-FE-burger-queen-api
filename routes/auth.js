@@ -22,7 +22,7 @@ module.exports = (app, nextMain) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return  (400);
+      return (400);
     }
     // TODO: autenticar a la usuarix
     db(dbUrl)

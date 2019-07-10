@@ -1,7 +1,9 @@
 {
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base","plugin:jest/recommended"],
+  "plugins": ["jest"],
   "env": {
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "parserOptions": {
     "ecmaVersion": 2018
@@ -14,6 +16,11 @@
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["e2e/**/*.js", "**/*.spec.js"]}],
     "no-console": ["error", {
       "allow": ["info", "warn", "error"]
-    }]
+    }],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }
