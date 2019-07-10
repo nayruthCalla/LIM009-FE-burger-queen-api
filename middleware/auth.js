@@ -23,10 +23,13 @@ module.exports = secret => (req, resp, next) => {
     const idUser = new ObjectID(decodedToken.sub);
     db()
       .then((db) => {
-        db.collection('users').findOne({ _id: idUser })
+        db.collection('users').findOne({ _id: idUser }).then((user) => { 
+          console.log(user);
+          next();
+        });
       });
   });
-  // console.log(req.headers);
+  console.log(req.headers);
 };
 
 

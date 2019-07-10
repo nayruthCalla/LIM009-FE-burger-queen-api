@@ -13,7 +13,6 @@ const app = express();
 
 db()
   .then(() => {
-    // console.log(db);
     app.set('config', config);
     app.set('pkg', pkg);
 
@@ -28,8 +27,8 @@ db()
         throw err;
       }
       app.use(errorHandler);
-    });
-    app.listen(port, () => {
-      console.info(`App listening on port ${port}`);
+      app.listen(port, () => {
+        console.info(`App listening on port ${port}`);
+      });
     });
   });

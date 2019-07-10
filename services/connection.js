@@ -3,11 +3,11 @@ const config = require('../config');
 
 module.exports = async () => {
   const { dbUrl } = config;
-  const dbName = 'burger-queen';
   const client = new MongoClient(dbUrl, { useNewUrlParser: true });
   try {
     await client.connect();
-    const db = client.db(dbName);
+    const db = client.db();
+    console.info('base de datos conectada');
     return db;
   } catch (err) {
     return console.log(err.stack);
