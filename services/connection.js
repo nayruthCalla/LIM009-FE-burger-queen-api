@@ -1,15 +1,15 @@
 const { MongoClient } = require('mongodb');
+const config = require('../config');
 
-module.exports = async (dbUrl) => {
-  // const dbName = 'burger-queen';
+module.exports = async () => {
+  const { dbUrl } = config;
   const client = new MongoClient(dbUrl, { useNewUrlParser: true });
   try {
     await client.connect();
     const db = client.db();
-    // console.log(db)
+    console.info('base de datos conectada');
     return db;
   } catch (err) {
-    console.log(err.stack);
+    return console.log(err.stack);
   }
-  client.close();
 };

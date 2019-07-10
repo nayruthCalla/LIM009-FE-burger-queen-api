@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const db = require('../services/connection');
 
 const {
   requireAuth,
@@ -18,7 +19,17 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
 
-  // TODO: crear usuaria admin
+  // TODO: crear usuarix admin
+  db()
+    .then((db) => {
+      db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
+        if (!userAdmin) {
+          db.collection('users').insertOne(adminUser);
+          return next();
+        }
+      });
+    });
+  return next();
 };
 
 
@@ -67,6 +78,13 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin
    */
   app.get('/users', requireAdmin, (req, resp) => {
+    db()
+      .then((db) => {
+        db.collection('users').find({}).toArray()
+          .then((users) => {
+            resp.send(users);
+          });
+      });
   });
 
   /**
