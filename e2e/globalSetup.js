@@ -103,7 +103,6 @@ const waitForServerToBeReady = (retries = 10) => new Promise((resolve, reject) =
   }, 1000);
 });
 
-
 module.exports = () => new Promise((resolve, reject) => {
   if (process.env.REMOTE_URL) {
     console.info(`Running tests on remote server ${process.env.REMOTE_URL}`);

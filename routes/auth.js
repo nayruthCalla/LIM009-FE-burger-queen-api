@@ -1,6 +1,6 @@
+const bcrypt = require('bcrypt');
 const config = require('../config');
 const db = require('../services/connection');
-const { dbUrl } = require('../config');
 const tokens = require('../services/tokens');
 
 const { secret } = config;
@@ -25,20 +25,17 @@ module.exports = (app, nextMain) => {
       return (400);
     }
     // TODO: autenticar a la usuarix
-    db(dbUrl)
+    db()
       .then((db) => {
         const query = { email };
         db.collection('users').findOne(query).then((user) => {
           if (!user) {
-            resp.send({ success: true, message: 'authentication failed. User not found' });
-          } else if (user) {
-            if (user.password !== password) {
-              resp.json({ success: false, message: 'authentication failed. Wrong password' });
-            } else {
-              const token = tokens(user, secret);
-              resp.json({ success: true, message: 'Enjoy your token', token });
-              return next();
-            }
+            resp.status(404).send({ message: 'authentication failed. User not found' });
+          } else if (!bcrypt.compareSync(password, user.password)) {
+            resp.status(401).send({ message: 'authentication failed. Wrong password' });
+          } else {
+            const token = tokens(user, secret);
+            resp.status(200).send({ message: 'authenticatio successful', token });
           }
         });
       })
