@@ -11,5 +11,5 @@ module.exports = async () => {
     return db;
   } catch (err) {
     return console.log(err.stack);
-  }
+  }      
 };

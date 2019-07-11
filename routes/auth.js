@@ -30,17 +30,20 @@ module.exports = (app, nextMain) => {
         const query = { email };
         db.collection('users').findOne(query).then((user) => {
           if (!user) {
-            resp.status(404).send({ message: 'authentication failed. User not found' });
+            resp.send({ message: 'authentication failed. User not found' });
+            next(404);
           } else if (!bcrypt.compareSync(password, user.password)) {
-            resp.status(401).send({ message: 'authentication failed. Wrong password' });
+            resp.send({ message: 'authentication failed. Wrong password' });
+            next(401);
           } else {
             const token = tokens(user, secret);
-            resp.status(200).send({ message: 'authenticatio successful', token });
+            resp.send({ message: 'authenticatio successful', token });
+            next();
           }
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.info(err);
       });
   });
   return nextMain();
