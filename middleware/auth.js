@@ -20,16 +20,16 @@ module.exports = secret => (req, resp, next) => {
       return next(403);
     }
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
-  /* const idUser = new ObjectID(decodedToken.sub);
-    db()
-      .then((db) => {
-        db.collection('users').findOne({ _id: idUser }).then((user) => {
-          if(user){
-            next();
-          }
+    /* const idUser = new ObjectID(decodedToken.sub);
+      db()
+        .then((db) => {
+          db.collection('users').findOne({ _id: idUser }).then((user) => {
+            if(user){
+              next();
+            }
 
-        });
-      }); */
+          });
+        }); */
   });
 };
 

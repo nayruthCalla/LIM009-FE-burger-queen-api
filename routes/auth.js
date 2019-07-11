@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const config = require('../config');
+const jwt = require('jsonwebtoken');
 const db = require('../services/connection');
-const tokens = require('../services/tokens');
+// const createToken = require('../services/tokens');
 
 const { secret } = config;
 
@@ -24,26 +25,22 @@ module.exports = (app, nextMain) => {
     if (!email || !password) {
       return (400);
     }
+    
     // TODO: autenticar a la usuarix
     db()
-      .then((db) => {
-        const query = { email };
-        db.collection('users').findOne(query).then((user) => {
-          if (!user) {
-            resp.send({ message: 'authentication failed. User not found' });
-            next(404);
-          } else if (!bcrypt.compareSync(password, user.password)) {
-            resp.send({ message: 'authentication failed. Wrong password' });
-            next(401);
-          } else {
-            const token = tokens(user, secret);
-            resp.send({ message: 'authenticatio successful', token });
-            next();
-          }
-        });
-      })
-      .catch((err) => {
-        console.info(err);
+      .then((db) => {      
+        db.collection('users').findOne({ email })
+          .then((user) => {
+            const payload = { uid: user._id, role: user.roles.admin };
+            if (!user) {
+              next(404);
+            } else if (!bcrypt.compareSync(password, user.password)) {
+              next(401);
+            } else {
+              resp.send({ message: 'authenticatio successful', token: jwt.sign(payload, secret) });
+              //return next()
+            }
+          });
       });
   });
   return nextMain();
