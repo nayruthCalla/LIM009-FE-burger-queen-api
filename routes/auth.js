@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
-const config = require('../config');
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 const db = require('../services/connection');
-// const createToken = require('../services/tokens');
 
 const { secret } = config;
 
@@ -23,22 +22,21 @@ module.exports = (app, nextMain) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return (400);
+      return next(400);
     }
-    
     // TODO: autenticar a la usuarix
+    
     db()
-      .then((db) => {      
+      .then((db) => {
         db.collection('users').findOne({ email })
           .then((user) => {
             const payload = { uid: user._id, role: user.roles.admin };
             if (!user) {
-              next(404);
+              next(403);
             } else if (!bcrypt.compareSync(password, user.password)) {
               next(401);
             } else {
               resp.send({ message: 'authenticatio successful', token: jwt.sign(payload, secret) });
-              //return next()
             }
           });
       });

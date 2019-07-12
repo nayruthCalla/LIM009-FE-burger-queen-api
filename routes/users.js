@@ -20,15 +20,13 @@ const initAdminUser = (app, next) => {
   };
 
   // TODO: crear usuarix admin
-  db()
-    .then((db) => {
-      db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
-        if (!userAdmin) {
-          db.collection('users').insertOne(adminUser);
-          return next();
-        }
-      });
+  db().then((db) => {
+    db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
+      if (!userAdmin) {
+        db.collection('users').insertOne(adminUser);
+      }
     });
+  });
   return next();
 };
 
