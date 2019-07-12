@@ -1,5 +1,5 @@
-const { ObjectID } = require('mongodb');
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 const db = require('../services/connection');
 
 module.exports = secret => (req, resp, next) => {
@@ -20,22 +20,23 @@ module.exports = secret => (req, resp, next) => {
       return next(403);
     }
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
-    const idUser = new ObjectID(decodedToken.sub);
+    console.info(decodedToken);
     db()
       .then((db) => {
-        db.collection('users').findOne({ _id: idUser }).then((user) => { 
-          console.log(user);
-          next();
-        });
+        db.collection('users').findOne({ _id: new ObjectId(decodedToken.uid) })
+          .then((user) => {
+            Object.assign(req, { userAuth: { id: user._id, role: user.roles.admin } });
+            next();
+          });
       });
   });
-  console.log(req.headers);
 };
 
 
 module.exports.isAuthenticated = req => (
   // TODO: decidir por la informacion del request si la usuaria esta autenticada
-  false
+  console.info(req.userAuth)
+  // false
 );
 
 

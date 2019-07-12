@@ -10,6 +10,7 @@ module.exports = async () => {
     console.info('base de datos conectada');
     return db;
   } catch (err) {
-    return console.log(err.stack);
+    console.log(err.stack);
   }
+  client.close();
 };
