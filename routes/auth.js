@@ -30,7 +30,7 @@ module.exports = (app, nextMain) => {
       .then((db) => {
         db.collection('users').findOne({ email })
           .then((user) => {
-            const payload = { uid: user._id, role: user.roles.admin };
+            const payload = { uid: user._id, roles: user.roles.admin };
             if (!user) {
               next(403);
             } else if (!bcrypt.compareSync(password, user.password)) {

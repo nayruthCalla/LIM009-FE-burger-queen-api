@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
-const { controllerCreateUser } = require('../controllers/user-controller');
+const { controllerCreateUser, controllerGetUserById } = require('../controllers/user-controller');
 
 const {
   requireAuth,
@@ -109,8 +109,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, (req, resp) => {
-  });
+  app.get('/users/:uid', requireAuth, controllerGetUserById);
 
   /**
    * @name POST /users

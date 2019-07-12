@@ -1,19 +1,42 @@
-const dbUser = require('../model/create-users');
+const { ObjectId } = require('mongodb');
+const { createUser } = require('../models/users-model');
+const { searchDataBase } = require('../models/general-model');
+
 
 module.exports = {
   controllerCreateUser: async (req, resp, next) => {
     const { email, password, roles } = req.body;
+    // console.log(req.body);
     if (!email || !password) {
       return next(400);
     }
-    // console.log(email)
-    const verifyUser = await dbUser.searchBd('users', { email });
-    if (verifyUser != null) {
+    const user = await searchDataBase('users', { email });
+    if (user != null) {
       return next(403);
     }
-    const user = await dbUser.createUser(email, password, roles)
-    return resp.send(user);
+    const newUser = await createUser(email, password, roles);
+    return resp.send({
+      _id: newUser.ops[0]._id,
+      email: newUser.ops[0].email,
+      roles: newUser.ops[0].roles,
+    });
   },
+  controllerGetUserById : async (req, resp, next) => {
+    // console.log(req.params.uid)
+    const emailOrId = req.params.uid;
+    let searchEmailOrId;
+    try {
+      searchEmailOrId = { _id: new ObjectId(emailOrId) };
+    } catch (error) {
+      searchEmailOrId = { email: emailOrId };
+    }
+    const user = await searchDataBase('users', searchEmailOrId);
+    if(!user){
+      retutn next(404)
+    }
+    resp.send()//falta terminar
+  }
+
 };
 
 // const createUserAdmin = async (adminUser, next) => {
@@ -25,16 +48,3 @@ module.exports = {
 //     await dbo.collection('users').insertOne(adminUser);
 //     next();
 //   }
-
-//   db().then((db) => {
-//     db.collection('users')
-//       .findOne({ email: adminUser.email })
-//       .then((userAdmin) => {
-//         if (!userAdmin) {
-//           db.collection('users').insertOne(adminUser);
-//           next();
-//         }
-//       });
-//   });
-// };
-// module.exports;
