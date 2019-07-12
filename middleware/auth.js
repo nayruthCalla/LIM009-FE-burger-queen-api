@@ -9,7 +9,7 @@ module.exports = secret => (req, resp, next) => {
     return next();
   }
 
-  const [type, token] = authorization.split(' ');
+  const [type, token] = authorization.replace(/ +/, ' ').split(' ');
 
   if (type.toLowerCase() !== 'bearer') {
     return next();
@@ -25,7 +25,7 @@ module.exports = secret => (req, resp, next) => {
       .then((db) => {
         db.collection('users').findOne({ _id: new ObjectId(decodedToken.uid) })
           .then((user) => {
-            Object.assign(req, { userAuth: { id: user._id, role: user.roles.admin } });
+            Object.assign(req, { userAuth: { id: user._id, rol: user.roles.admin } });
             next();
           });
       });
@@ -35,14 +35,15 @@ module.exports = secret => (req, resp, next) => {
 
 module.exports.isAuthenticated = req => (
   // TODO: decidir por la informacion del request si la usuaria esta autenticada
-  console.info(req.userAuth)
-  // false
+  // req del authMiddleware => middleware requireAdmin
+  req.userAuth
+
 );
 
 
 module.exports.isAdmin = req => (
   // TODO: decidir por la informacion del request si la usuaria es admin
-  false
+  req.userAuth.rol
 );
 
 
@@ -54,7 +55,9 @@ module.exports.requireAuth = (req, resp, next) => (
 
 
 module.exports.requireAdmin = (req, resp, next) => (
-  // eslint-disable-next-line no-nested-ternary
+  // eslint-disable-next-line no-nested-ternary;
+  // console.log(req,'req')
+  // console.log(module.exports.isAuthenticated(req),'ias')
   (!module.exports.isAuthenticated(req))
     ? next(401)
     : (!module.exports.isAdmin(req))

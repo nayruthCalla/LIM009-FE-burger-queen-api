@@ -18,6 +18,11 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
+  const User = {
+    email: 'mesero2@gmail.com',
+    password: bcrypt.hashSync('123', 10),
+    roles: { admin: false },
+  };
 
   // TODO: crear usuarix admin
   db().then((db) => {
@@ -25,6 +30,7 @@ const initAdminUser = (app, next) => {
       if (!userAdmin) {
         db.collection('users').insertOne(adminUser);
       }
+      // db.collection('users').insertOne(User);
     });
   });
   return next();
