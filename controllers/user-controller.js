@@ -34,7 +34,11 @@ module.exports = {
     if(!user){
       retutn next(404)
     }
-    resp.send()//falta terminar
+    resp.send({
+      _id: user._id,
+      email: user.email,
+      roles: user.roles
+    })//falta terminar
   }
 
 };
