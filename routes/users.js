@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
 
+const { getUserById, createUser } = require('../controllers/user-controller');
+
 const {
   requireAuth,
   requireAdmin,
@@ -18,11 +20,6 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
-  const User = {
-    email: 'mesero2@gmail.com',
-    password: bcrypt.hashSync('123', 10),
-    roles: { admin: false },
-  };
 
   // TODO: crear usuarix admin
   db().then((db) => {
@@ -30,7 +27,6 @@ const initAdminUser = (app, next) => {
       if (!userAdmin) {
         db.collection('users').insertOne(adminUser);
       }
-      // db.collection('users').insertOne(User);
     });
   });
   return next();
@@ -107,8 +103,8 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, (req, resp) => {
-  });
+  app.get('/users/:uid', requireAuth, getUserById);
+  // importante agregar un midleware de   comprabiacio de mismo usuario
 
   /**
    * @name POST /users
@@ -129,8 +125,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', requireAdmin, (req, resp, next) => {
-  });
+  app.post('/users', requireAdmin, createUser);
 
   /**
    * @name PUT /users

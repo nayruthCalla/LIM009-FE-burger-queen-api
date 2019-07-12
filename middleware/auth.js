@@ -25,8 +25,12 @@ module.exports = secret => (req, resp, next) => {
       .then((db) => {
         db.collection('users').findOne({ _id: new ObjectId(decodedToken.uid) })
           .then((user) => {
-            Object.assign(req, { userAuth: { id: user._id, rol: user.roles.admin } });
-            next();
+            if (user) {
+              Object.assign(req, { userAuth: { id: user._id, roles: user.roles.admin } });
+              next();
+            } else {
+              next(404);
+            }
           });
       });
   });
@@ -43,7 +47,7 @@ module.exports.isAuthenticated = req => (
 
 module.exports.isAdmin = req => (
   // TODO: decidir por la informacion del request si la usuaria es admin
-  req.userAuth.rol
+  req.userAuth.roles
 );
 
 
