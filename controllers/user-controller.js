@@ -31,15 +31,15 @@ module.exports = {
       searchEmailOrId = { email: emailOrId };
     }
     const user = await searchDataBase('users', searchEmailOrId);
-    if(!user){
-      retutn next(404)
+    if (!user) {
+      return next(404);
     }
     resp.send({
       _id: user._id,
       email: user.email,
       roles: user.roles
     })//falta terminar
-  }
+  },
 
 };
 
