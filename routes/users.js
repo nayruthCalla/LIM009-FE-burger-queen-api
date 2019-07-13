@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
+const { controllerCreateUser, controllerGetUserById } = require('../controllers/user-controller');
 
 const { getUserById, createUser } = require('../controllers/user-controller');
 
@@ -61,6 +62,7 @@ const initAdminUser = (app, next) => {
 
 /** @module users */
 module.exports = (app, next) => {
+  // console.log(controllerCreateUser)
   /**
    * @name GET /users
    * @description Lista usuarias
@@ -103,8 +105,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, getUserById);
-  // importante agregar un midleware de   comprabiacio de mismo usuario
+  app.get('/users/:uid', requireAuth, controllerGetUserById);
 
   /**
    * @name POST /users
@@ -125,8 +126,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', requireAdmin, createUser);
-
+  app.post('/users', requireAdmin, controllerCreateUser);
   /**
    * @name PUT /users
    * @description Modifica una usuaria
