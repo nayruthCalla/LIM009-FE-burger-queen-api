@@ -21,7 +21,7 @@ module.exports = {
       roles: newUser.ops[0].roles,
     });
   },
-  controllerGetUserById : async (req, resp, next) => {
+  controllerGetUserById: async (req, resp, next) => {
     // console.log(req.params.uid)
     const emailOrId = req.params.uid;
     let searchEmailOrId;
@@ -37,7 +37,7 @@ module.exports = {
     resp.send({
       _id: user._id,
       email: user.email,
-      roles: user.roles
+      roles: user.roles,
     })//falta terminar
   },
 
