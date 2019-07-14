@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
-const { controllerCreateUser, controllerGetUserById } = require('../controllers/user-controller');
-
-const { getUserById, createUser } = require('../controllers/user-controller');
+const {
+  controllerCreateUser,
+  controllerGetUserById,
+  controllerPutUserById,
+  controllerDeleteUserById,
+} = require('../controllers/user-controller');
 
 const {
   requireAuth,
@@ -21,7 +24,6 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
-
   // TODO: crear usuarix admin
   db().then((db) => {
     db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
@@ -149,8 +151,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.put('/users/:uid', requireAuth, controllerPutUserById);
 
   /**
    * @name DELETE /users
@@ -168,8 +169,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.delete('/users/:uid', requireAuth, controllerDeleteUserById);
 
   initAdminUser(app, next);
 };

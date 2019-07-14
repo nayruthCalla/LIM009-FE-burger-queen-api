@@ -7,6 +7,4 @@ module.exports = {
       .findOne(documents);
     return result;
   },
-  db: () => 'hola',
-
 };
