@@ -68,7 +68,29 @@ module.exports = {
       roles: updateUserOne.roles,
     });
   },
-  
+  controllerDeleteUserById: async (req, resp, next) => {
+    const emailOrId = req.params.uid;
+    const { roles } = req.body;
+    if (roles && roles.admin && !isAdmin(req)) {
+      return next(403);
+    }
+    let searchEmailOrId;
+    try {
+      searchEmailOrId = { _id: new ObjectId(emailOrId) };
+    } catch (error) {
+      searchEmailOrId = { email: emailOrId };
+    }
+    const user = await searchDataBase('users', searchEmailOrId);
+    if (!user) {
+      return next(404);
+    }
+    await deleteUser(user._id);
+    return resp.send({
+      _id: user._id,
+      email: user.email,
+      roles: user.roles,
+    });
+  },
 };
 
 // const createUserAdmin = async (adminUser, next) => {
