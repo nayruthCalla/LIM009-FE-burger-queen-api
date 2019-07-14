@@ -11,4 +11,21 @@ module.exports = {
       .insertOne({ email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
     return user;
   },
+  updateUser: async (idUser, email, password, rol) => {
+    // console.log(typeof idUser,idUser)
+    const statusRol = (typeof rol === 'object')
+      ? (!rol.admin) ? false : rol.admin
+      : false;
+    const user = await (await db())
+      .collection('users')
+      .updateOne({ _id: idUser },
+        { $set: { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } } });
+    return user;
+  },
+  deleteUser: async (idUser) => {
+    const user = await (await db())
+      .collection('users')
+      .deleteOne({ _id: idUser });
+    return user;
+  },
 };
