@@ -25,7 +25,7 @@ module.exports = (app, nextMain) => {
       return next(400);
     }
     // TODO: autenticar a la usuarix
-
+    
     db(dbUrl)
       .then((db) => {
         db.collection('users').findOne({ email })

@@ -1,10 +1,11 @@
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
-const { dbUrl } = require('../config');
+const modelDataBase = require('../models/general-model');
 const { isAdmin } = require('../middleware/auth');
-const { searchDataBase, showListCollections } = require('../models/general-model');
-const { createUser, updateUser, deleteUser } = require('../models/users-model');
+const config = require('../config');
 
+const { dbUrl } = config;
+const userController = modelDataBase('users', dbUrl);
 
 module.exports = {
   controllerCreateUser: async (req, resp, next) => {
@@ -13,14 +14,14 @@ module.exports = {
     if (!email || !password) {
       return next(400);
     }
-    const user = await searchDataBase('users', dbUrl, { email });
+    const user = await userController.searchDataBase({ email });
     if (user != null) {
       return next(403);
     }
     const statusRol = (typeof roles === 'object')
       ? (!roles.admin) ? false : roles.admin
       : false;
-    const newUser = await createUser('users', dbUrl, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
+    const newUser = await userController.createDocument({ email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
     return resp.send({
       _id: newUser.ops[0]._id,
       email: newUser.ops[0].email,
@@ -33,7 +34,7 @@ module.exports = {
     const limit = parseInt(req.query.limit) || 10;
     const skip = ((limit * page) - limit);
 
-    const users = await showListCollections('users', dbUrl, skip, limit);
+    const users = await userController.showListCollections(skip, limit);
     const usersList = users.map(user => ({
       _id: user._id,
       email: user.email,
@@ -50,7 +51,7 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
+    const user = await userController.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
     }
@@ -75,15 +76,15 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
+    const user = await userController.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
     }
     const statusRol = (typeof roles === 'object')
       ? (!roles.admin) ? false : roles.admin
       : false;
-    await updateUser('users', dbUrl, user._id, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
-    const updateUserOne = await searchDataBase('users', dbUrl, searchEmailOrId);
+    await userController.updateDocument(user._id, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
+    const updateUserOne = await userController.searchDataBase(searchEmailOrId);
     return resp.send({
       _id: updateUserOne._id,
       email: updateUserOne.email,
@@ -102,11 +103,11 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
+    const user = await userController.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
     }
-    await deleteUser('users', dbUrl, user._id);
+    await userController.deleteUser(user._id);
     return resp.send({
       _id: user._id,
       email: user.email,
@@ -114,12 +115,3 @@ module.exports = {
     });
   },
 };
-// const createUserAdmin = async (adminUser, next) => {
-//   const dbo = await db();
-//   const user = await dbo
-//     .collection('users')
-//     .findOne({ email: adminUser.email });
-//   if (!user) {
-//     await dbo.collection('users').insertOne(adminUser);
-//     next();
-//   }

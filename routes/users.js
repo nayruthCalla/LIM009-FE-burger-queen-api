@@ -16,7 +16,6 @@ const {
   requireAdminAndOwnerUser,
 } = require('../middleware/auth');
 
-
 const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
@@ -101,7 +100,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAdminAndOwnerUser, controllerGetUserById);
+  app.get('/users/:uid', requireAuth, requireAdminAndOwnerUser, controllerGetUserById);
 
   /**
    * @name POST /users
