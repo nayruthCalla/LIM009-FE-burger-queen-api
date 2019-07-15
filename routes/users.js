@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../services/connection');
 const {
   controllerCreateUser,
+  controllerGetAllUsers,
   controllerGetUserById,
   controllerPutUserById,
   controllerDeleteUserById,
@@ -10,12 +11,13 @@ const {
 const {
   requireAuth,
   requireAdmin,
+  requireAdminAndOwnerUser,
 } = require('../middleware/auth');
 const config = require('../config');
 
 const { dbUrl } = config;
 
-const initAdminUser = (app, next) => {
+const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
     return next();
@@ -27,14 +29,11 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  db(dbUrl).then((db) => {
-    db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
-      if (!userAdmin) {
-        db.collection('users').insertOne(adminUser);
-      }
-      // db.collection('users').insertOne(User);
-    });
-  });
+  const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
+  if (!userAdmin) {
+    await (await db(dbUrl).collection('users').insertOne(adminUser));
+    return next();
+  }
   return next();
 };
 
@@ -84,15 +83,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es ni admin
    */
-  app.get('/users', requireAdmin, (req, resp) => {
-    db(dbUrl)
-      .then((db) => {
-        db.collection('users').find({}).toArray()
-          .then((users) => {
-            resp.send(users);
-          });
-      });
-  });
+  app.get('/users', requireAdmin, controllerGetAllUsers);
 
   /**
    * @name GET /users/:uid
@@ -110,7 +101,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, controllerGetUserById);
+  app.get('/users/:uid', requireAuth, requireAdminAndOwnerUser, controllerGetUserById);
 
   /**
    * @name POST /users

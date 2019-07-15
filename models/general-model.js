@@ -26,4 +26,12 @@ module.exports = (collection, dbUrl) => ({
       .findOne(document);
     return result;
   },
+  showListCollections: async (skip, limit) => {
+    const result = await (await db(dbUrl))
+      .collection(collection)
+      .find({}).skip(skip)
+      .limit(limit)
+      .toArray();
+    return result;
+  },
 });
