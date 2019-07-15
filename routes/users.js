@@ -13,10 +13,11 @@ const {
 const {
   requireAuth,
   requireAdmin,
+  requireAdminAndOwnerUser,
 } = require('../middleware/auth');
 
 
-const initAdminUser = (app, next) => {
+const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
     return next();
@@ -28,13 +29,11 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  db(dbUrl).then((db) => {
-    db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
-      if (!userAdmin) {
-        db.collection('users').insertOne(adminUser);
-      }
-    });
-  });
+  const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
+  if (!userAdmin) {
+    await (await db(dbUrl).collection('users').insertOne(adminUser));
+    return next();
+  }
   return next();
 };
 
@@ -102,7 +101,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, controllerGetUserById);
+  app.get('/users/:uid', requireAdminAndOwnerUser, controllerGetUserById);
 
   /**
    * @name POST /users

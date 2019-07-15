@@ -31,7 +31,7 @@ module.exports = secret => (req, resp, next) => {
         db.collection('users').findOne({ _id: new ObjectId(decodedToken.uid) })
           .then((user) => {
             if (user) {
-              Object.assign(req, { userAuth: { id: user._id, roles: user.roles.admin } });
+              Object.assign(req, { userAuth: { id: decodedToken.uid, email: user.email, roles: user.roles.admin } });
               next();
             } else {
               next(404);
@@ -55,6 +55,10 @@ module.exports.isAdmin = req => (
   req.userAuth.roles
 );
 
+module.exports.isOwnerUser = req => (
+  // TODO: decidir por la informacion del request si la usuaria es admin
+  req.userAuth.id
+);
 
 module.exports.requireAuth = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
@@ -62,14 +66,22 @@ module.exports.requireAuth = (req, resp, next) => (
     : next()
 );
 
-
 module.exports.requireAdmin = (req, resp, next) => (
-  // eslint-disable-next-line no-nested-ternary;
-  // console.log(req,'req')
-  // console.log(module.exports.isAuthenticated(req),'ias')
   (!module.exports.isAuthenticated(req))
     ? next(401)
     : (!module.exports.isAdmin(req))
       ? next(403)
       : next()
 );
+
+module.exports.requireAdminAndOwnerUser = (req, resp, next) => {
+  console.info(req.userAuth);
+  // console.info(typeof req.userAuth.id)
+  return (!module.exports.isAuthenticated(req))
+    ? next(401)
+    : (!module.exports.isAdmin(req))
+      ? (!(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
+        ? next(403)
+        : next()
+      : next();
+};
