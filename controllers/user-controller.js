@@ -1,21 +1,26 @@
 const { ObjectId } = require('mongodb');
-const { createUser, updateUser, deleteUser } = require('../models/users-model');
-const { searchDataBase, showListCollections } = require('../models/general-model');
+const bcrypt = require('bcrypt');
+const { dbUrl } = require('../config');
 const { isAdmin } = require('../middleware/auth');
+const { searchDataBase, showListCollections } = require('../models/general-model');
+const { createUser, updateUser, deleteUser } = require('../models/users-model');
 
 
 module.exports = {
   controllerCreateUser: async (req, resp, next) => {
     const { email, password, roles } = req.body;
-    // console.log(req);
+    // console.log(req)
     if (!email || !password) {
       return next(400);
     }
-    const user = await searchDataBase('users', { email });
+    const user = await searchDataBase('users', dbUrl, { email });
     if (user != null) {
       return next(403);
     }
-    const newUser = await createUser(email, password, roles);
+    const statusRol = (typeof roles === 'object')
+      ? (!roles.admin) ? false : roles.admin
+      : false;
+    const newUser = await createUser('users', dbUrl, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
     return resp.send({
       _id: newUser.ops[0]._id,
       email: newUser.ops[0].email,
@@ -28,7 +33,7 @@ module.exports = {
     const limit = parseInt(req.query.limit) || 10;
     const skip = ((limit * page) - limit);
 
-    const users = await showListCollections('users', skip, limit);
+    const users = await showListCollections('users', dbUrl, skip, limit);
     const usersList = users.map(user => ({
       _id: user._id,
       email: user.email,
@@ -45,7 +50,7 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', searchEmailOrId);
+    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
     if (!user) {
       return next(404);
     }
@@ -70,12 +75,15 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', searchEmailOrId);
+    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
     if (!user) {
       return next(404);
     }
-    await updateUser(user._id, email, password);
-    const updateUserOne = await searchDataBase('users', searchEmailOrId);
+    const statusRol = (typeof roles === 'object')
+      ? (!roles.admin) ? false : roles.admin
+      : false;
+    await updateUser('users', dbUrl, user._id, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
+    const updateUserOne = await searchDataBase('users', dbUrl, searchEmailOrId);
     return resp.send({
       _id: updateUserOne._id,
       email: updateUserOne.email,
@@ -94,11 +102,11 @@ module.exports = {
     } catch (error) {
       searchEmailOrId = { email: emailOrId };
     }
-    const user = await searchDataBase('users', searchEmailOrId);
+    const user = await searchDataBase('users', dbUrl, searchEmailOrId);
     if (!user) {
       return next(404);
     }
-    await deleteUser(user._id);
+    await deleteUser('users', dbUrl, user._id);
     return resp.send({
       _id: user._id,
       email: user.email,
@@ -106,7 +114,6 @@ module.exports = {
     });
   },
 };
-
 // const createUserAdmin = async (adminUser, next) => {
 //   const dbo = await db();
 //   const user = await dbo

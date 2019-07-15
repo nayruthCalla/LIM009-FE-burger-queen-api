@@ -6,12 +6,12 @@ const routes = require('./routes');
 const pkg = require('./package.json');
 const db = require('./services/connection');
 
-const { port, secret } = config;
+const { dbUrl, port, secret } = config;
 const app = express();
 
 // TODO: Conección a la BD en mogodb
 
-db()
+db(dbUrl)
   .then(() => {
     app.set('config', config);
     app.set('pkg', pkg);

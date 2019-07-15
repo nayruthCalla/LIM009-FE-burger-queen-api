@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const db = require('../services/connection');
 
-const { secret } = config;
+const { dbUrl, secret } = config;
 
 /** @module auth */
 module.exports = (app, nextMain) => {
@@ -26,7 +26,7 @@ module.exports = (app, nextMain) => {
     }
     // TODO: autenticar a la usuarix
 
-    db()
+    db(dbUrl)
       .then((db) => {
         db.collection('users').findOne({ email })
           .then((user) => {

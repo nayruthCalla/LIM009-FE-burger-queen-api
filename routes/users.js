@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
+const { dbUrl } = require('../config');
+
 const {
   controllerCreateUser,
   controllerGetAllUsers,
@@ -26,7 +28,7 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  db().then((db) => {
+  db(dbUrl).then((db) => {
     db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
       if (!userAdmin) {
         db.collection('users').insertOne(adminUser);

@@ -1,8 +1,6 @@
-/*const { MongoClient } = require('mongodb');
-const config = require('../config');
+const { MongoClient } = require('mongodb');
 
-module.exports = async () => {
-  const { dbUrl } = config;
+module.exports = async (dbUrl) => {
   const client = new MongoClient(dbUrl, { useNewUrlParser: true });
   try {
     await client.connect();
@@ -10,17 +8,18 @@ module.exports = async () => {
     console.info('base de datos conectada');
     return db;
   } catch (err) {
-    console.log(err.stack);
+    console.info(err.stack);
   }
   client.close();
-};*/
+  console.info('connection close');
+};
 
+/*
 const { MongoClient } = require('mongodb');
-const { dbUrl } = require('../config');
 
 let db;
 
-module.exports = () => {
+module.exports = (dbUrl) => {
   if (!db) {
     const MonClient = MongoClient(dbUrl, { useNewUrlParser: true });
     return MonClient.connect().then((client) => {
@@ -30,4 +29,4 @@ module.exports = () => {
     });
   }
   return Promise.resolve(db);
-};
+}; */
