@@ -1,10 +1,18 @@
 const db = require('../services/connection');
 
 module.exports = {
-  searchDataBase: async (collection, documents) => {
+  searchDataBase: async (collectionName, documents) => {
     const result = await (await db())
-      .collection(collection)
+      .collection(collectionName)
       .findOne(documents);
+    return result;
+  },
+  showListCollections: async (collectionName, skip, limit) => {
+    const result = await (await db())
+      .collection(collectionName)
+      .find({}).skip(skip)
+      .limit(limit)
+      .toArray();
     return result;
   },
 };

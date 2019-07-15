@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../services/connection');
 const {
   controllerCreateUser,
+  controllerGetAllUsers,
   controllerGetUserById,
   controllerPutUserById,
   controllerDeleteUserById,
@@ -81,15 +82,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es ni admin
    */
-  app.get('/users', requireAdmin, (req, resp) => {
-    db()
-      .then((db) => {
-        db.collection('users').find({}).toArray()
-          .then((users) => {
-            resp.send(users);
-          });
-      });
-  });
+  app.get('/users', requireAdmin, controllerGetAllUsers);
 
   /**
    * @name GET /users/:uid
