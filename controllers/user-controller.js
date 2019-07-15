@@ -28,6 +28,20 @@ module.exports = {
       roles: newUser.ops[0].roles,
     });
   },
+  controllerGetAllUsers: async (req, resp) => {
+    // console.info(req.query);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = ((limit * page) - limit);
+
+    const users = await userController.showListCollections(skip, limit);
+    const usersList = users.map(user => ({
+      _id: user._id,
+      email: user.email,
+      roles: { admin: user.roles.admin },
+    }));
+    resp.send(usersList);
+  },
   controllerGetUserById: async (req, resp, next) => {
     // console.log(req.params.uid)
     const emailOrId = req.params.uid;
