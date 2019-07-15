@@ -27,11 +27,29 @@ describe('Base de datos en memoria', () => {
   });
   it('Eliminando un Documento en la BD', async () => {
     const user = await userController.searchDataBase({ email: 'meseroactualizado@gmail.com' });
-    await userController.deleteDocument(user._id);  
+    await userController.deleteDocument(user._id);
     const deleteUserOne = await userController.searchDataBase({ email: 'meseroactualizado@gmail.com' });
     expect(deleteUserOne).toEqual(null);
   });
+  it('Lista de usuarios de la pagina dos con un limite de 5', async () => {
+    const createUsersMany = (cont, numDoc) => {
+      while (cont <= numDoc) {
+        userController.createDocument({
+          email: `user00${cont}@localhost`,
+          password: '$2b$10$.Jqhq/.CAkjv7CT3mOacqOBp3.DjbK4Bc6YqWZsYvyLDWG50d.Bxq',
+          roles: { admin: false },
+        });
+        cont++;
+      }
+    };
+    await createUsersMany(1, 10);
+    const users = await userController.showListCollections(5, 10);
+    // console.info(users);
+    expect(users[0].email).toEqual('user006@localhost');
+    expect(users[4].email).toEqual('user0010@localhost');
+  });
+
   afterAll(async () => {
-    
+
   });
 });
