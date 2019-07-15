@@ -11,7 +11,9 @@ const {
   requireAuth,
   requireAdmin,
 } = require('../middleware/auth');
+const config = require('../config');
 
+const { dbUrl } = config;
 
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
@@ -25,7 +27,7 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  db().then((db) => {
+  db(dbUrl).then((db) => {
     db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
       if (!userAdmin) {
         db.collection('users').insertOne(adminUser);
@@ -83,7 +85,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin
    */
   app.get('/users', requireAdmin, (req, resp) => {
-    db()
+    db(dbUrl)
       .then((db) => {
         db.collection('users').find({}).toArray()
           .then((users) => {
