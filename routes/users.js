@@ -1,12 +1,19 @@
 const bcrypt = require('bcrypt');
 const db = require('../services/connection');
-const { controllerCreateUser, controllerGetUserById } = require('../controllers/user-controller');
+const {
+  controllerCreateUser,
+  controllerGetUserById,
+  controllerPutUserById,
+  controllerDeleteUserById,
+} = require('../controllers/user-controller');
 
 const {
   requireAuth,
   requireAdmin,
 } = require('../middleware/auth');
+const config = require('../config');
 
+const { dbUrl } = config;
 
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
@@ -19,14 +26,8 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
-  const User = {
-    email: 'mesero2@gmail.com',
-    password: bcrypt.hashSync('123', 10),
-    roles: { admin: false },
-  };
-
   // TODO: crear usuarix admin
-  db().then((db) => {
+  db(dbUrl).then((db) => {
     db.collection('users').findOne({ email: adminUser.email }).then((userAdmin) => {
       if (!userAdmin) {
         db.collection('users').insertOne(adminUser);
@@ -84,7 +85,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin
    */
   app.get('/users', requireAdmin, (req, resp) => {
-    db()
+    db(dbUrl)
       .then((db) => {
         db.collection('users').find({}).toArray()
           .then((users) => {
@@ -153,8 +154,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.put('/users/:uid', requireAuth, controllerPutUserById);
 
   /**
    * @name DELETE /users
@@ -172,8 +172,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.delete('/users/:uid', requireAuth, controllerDeleteUserById);
 
   initAdminUser(app, next);
 };

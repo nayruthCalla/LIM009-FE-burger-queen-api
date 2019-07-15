@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const db = require('../services/connection');
 const { searchDataBase } = require('../models/general-model');
+const config = require('../config');
+
+const { dbUrl } = config;
 
 module.exports = secret => (req, resp, next) => {
   const { authorization } = req.headers;
@@ -23,7 +26,7 @@ module.exports = secret => (req, resp, next) => {
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
     console.info(decodedToken);
     
-    db()
+    db(dbUrl)
       .then((db) => {
         db.collection('users').findOne({ _id: new ObjectId(decodedToken.uid) })
           .then((user) => {

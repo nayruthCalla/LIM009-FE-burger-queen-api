@@ -1,8 +1,6 @@
 const { MongoClient } = require('mongodb');
-const config = require('../config');
 
-module.exports = async () => {
-  const { dbUrl } = config;
+module.exports = async (dbUrl) => {
   const client = new MongoClient(dbUrl, { useNewUrlParser: true });
   try {
     await client.connect();
