@@ -14,6 +14,7 @@ const {
   requireAuth,
   requireAdmin,
   requireAdminAndOwnerUser,
+  changeRoles,
 } = require('../middleware/auth');
 
 const initAdminUser = async (app, next) => {
@@ -30,8 +31,7 @@ const initAdminUser = async (app, next) => {
   // TODO: crear usuarix admin
   const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
   if (!userAdmin) {
-    await (await db(dbUrl).collection('users').insertOne(adminUser));
-    return next();
+    await ((await db(dbUrl)).collection('users').insertOne(adminUser));    
   }
   return next();
 };
@@ -144,7 +144,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, controllerPutUserById);
+  app.put('/users/:uid', requireAuth, requireAdminAndOwnerUser, changeRoles, controllerPutUserById);
 
   /**
    * @name DELETE /users
@@ -162,7 +162,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, controllerDeleteUserById);
+  app.delete('/users/:uid', requireAuth, requireAdminAndOwnerUser, controllerDeleteUserById);
 
   initAdminUser(app, next);
 };
