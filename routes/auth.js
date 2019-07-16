@@ -31,7 +31,7 @@ module.exports = (app, nextMain) => {
         db.collection('users').findOne({ email })
           .then((user) => {
             if (!user) {
-              next(403);
+              next(404);
             } else if (!bcrypt.compareSync(password, user.password)) {
               next(401);
             } else {

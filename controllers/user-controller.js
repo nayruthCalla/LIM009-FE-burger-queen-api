@@ -1,11 +1,7 @@
 const { ObjectId } = require('mongodb');
-const bcrypt = require('bcrypt');
-const modelDataBase = require('../models/general-model');
-const { dbUrl } = require('../config');
 
-const userModel = modelDataBase('users', dbUrl);
 
-module.exports = {
+module.exports = (userModel, bcrypt) => ({
 
   controllerCreateUser: async (req, resp, next) => {
     const { email, password, roles } = req.body;
@@ -62,7 +58,7 @@ module.exports = {
   },
   controllerPutUserById: async (req, resp, next) => {
     const { email, password, roles } = req.body;
-    if (email.trim().length === 0 || password.trim().length === 0) {
+    if (!email || !password) {
       return next(400);
     }
     const emailOrId = req.params.uid;
@@ -99,11 +95,11 @@ module.exports = {
     if (!user) {
       return next(404);
     }
-    await userModel.deleteUser(user._id);
+    await userModel.deleteDocument(user._id);
     return resp.send({
       _id: user._id,
       email: user.email,
       roles: user.roles,
     });
   },
-};
+});

@@ -2,13 +2,13 @@ const bcrypt = require('bcrypt');
 const db = require('../services/connection');
 const { dbUrl } = require('../config');
 
-const {
-  controllerCreateUser,
-  controllerGetAllUsers,
-  controllerGetUserById,
-  controllerPutUserById,
-  controllerDeleteUserById,
-} = require('../controllers/user-controller');
+const modelDataBase = require('../models/general-model');
+
+const userModel = modelDataBase('users', dbUrl);
+
+const modelController = require('../controllers/user-controller');
+
+const userController = modelController(userModel, bcrypt);
 
 const {
   requireAuth,
@@ -31,7 +31,7 @@ const initAdminUser = async (app, next) => {
   // TODO: crear usuarix admin
   const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
   if (!userAdmin) {
-    await ((await db(dbUrl)).collection('users').insertOne(adminUser));    
+    await ((await db(dbUrl)).collection('users').insertOne(adminUser));
   }
   return next();
 };
@@ -82,7 +82,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es ni admin
    */
-  app.get('/users', requireAdmin, controllerGetAllUsers);
+  app.get('/users', requireAdmin, userController.controllerGetAllUsers);
 
   /**
    * @name GET /users/:uid
@@ -100,7 +100,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, requireAdminAndOwnerUser, controllerGetUserById);
+  app.get('/users/:uid', requireAuth, requireAdminAndOwnerUser, userController.controllerGetUserById);
 
   /**
    * @name POST /users
@@ -121,7 +121,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', requireAdmin, controllerCreateUser);
+  app.post('/users', requireAdmin, userController.controllerCreateUser);
   /**
    * @name PUT /users
    * @description Modifica una usuaria
@@ -144,7 +144,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, requireAdminAndOwnerUser, changeRoles, controllerPutUserById);
+  app.put('/users/:uid', requireAuth, requireAdminAndOwnerUser, changeRoles, userController.controllerPutUserById);
 
   /**
    * @name DELETE /users
@@ -162,7 +162,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, requireAdminAndOwnerUser, controllerDeleteUserById);
+  app.delete('/users/:uid', requireAuth, requireAdminAndOwnerUser, userController.controllerDeleteUserById);
 
   initAdminUser(app, next);
 };
