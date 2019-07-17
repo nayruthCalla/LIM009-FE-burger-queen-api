@@ -1,15 +1,15 @@
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const modelDataBase = require('../models/general-model');
+const { dbUrl } = require('../config');
 const { isAdmin } = require('../middleware/auth');
-const config = require('../config');
 
-const { dbUrl } = config;
-const userModel = modelDataBase('users', dbUrl);
+// const { dbUrl } = config;
+// const userModel = modelDataBase('users', dbUrl);
 
-const controller = controller(modelDataBase)(bcrypt);
-controller.controllerCreateUser(req, res, next)
-module.exports = (model) => (bcrypt) => {
+// const controller = controller(modelDataBase)(bcrypt);
+module.exports = userModel => bcrypt => ({
+// controller.controllerCreateUser(req, res, next)
   controllerCreateUser: async (req, resp, next) => {
     const { email, password, roles } = req.body;
     // console.log(req)
@@ -65,11 +65,11 @@ module.exports = (model) => (bcrypt) => {
   },
   controllerPutUserById: async (req, resp, next) => {
     const { email, password, roles } = req.body;
-    if (roles && roles.admin && !isAdmin(req)) {
-      return next(403);
-    }
     if (email.trim().length === 0 || password.trim().length === 0) {
       return next(400);
+    }
+    if (roles && roles.admin && !isAdmin(req)) {
+      return next(403);
     }
     const emailOrId = req.params.uid;
     let searchEmailOrId;
@@ -95,10 +95,6 @@ module.exports = (model) => (bcrypt) => {
   },
   controllerDeleteUserById: async (req, resp, next) => {
     const emailOrId = req.params.uid;
-    const { roles } = req.body;
-    if (roles && roles.admin && !isAdmin(req)) {
-      return next(403);
-    }
     let searchEmailOrId;
     try {
       searchEmailOrId = { _id: new ObjectId(emailOrId) };
@@ -109,11 +105,11 @@ module.exports = (model) => (bcrypt) => {
     if (!user) {
       return next(404);
     }
-    await userModel.deleteUser(user._id);
+    await userModel.deleteDocument(user._id);
     return resp.send({
       _id: user._id,
       email: user.email,
       roles: user.roles,
     });
   },
-};
+});

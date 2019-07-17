@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=10"
   },
+  "jest": {
+    "verbose": true
+  },
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",

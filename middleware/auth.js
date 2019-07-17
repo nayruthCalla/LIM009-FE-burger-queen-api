@@ -82,3 +82,13 @@ module.exports.requireAdminAndOwnerUser = (req, resp, next) => {
         : next()
       : next();
 };
+
+
+module.exports.changeRoles = (req, resp, next) => {
+  const { roles } = req.body;
+  return (!module.exports.isAuthenticated(req))
+    ? next(401)
+    : (!module.exports.isAdmin(req) && roles && roles.admin)
+      ? next(403)
+      : next();
+};
