@@ -1,6 +1,5 @@
 const { ObjectId } = require('mongodb');
 
-
 module.exports = (userModel, bcrypt) => ({
 
   controllerCreateUser: async (req, resp, next) => {
@@ -58,9 +57,10 @@ module.exports = (userModel, bcrypt) => ({
   },
   controllerPutUserById: async (req, resp, next) => {
     const { email, password, roles } = req.body;
-    if (!email || !password) {
+    if (!email && !password) {
       return next(400);
     }
+
     const emailOrId = req.params.uid;
     let searchEmailOrId;
     try {
@@ -73,9 +73,13 @@ module.exports = (userModel, bcrypt) => ({
       return next(404);
     }
     const statusRol = (typeof roles === 'object')
-      ? (!roles.admin) ? false : roles.admin
-      : false;
-    await userModel.updateDocument(user._id, { email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
+      ? (!roles.admin) ? false : roles.admin : false;
+
+    await userModel.updateDocument(user._id, {
+      email: email || user.email,
+      password: (!password) ? user.password : bcrypt.hashSync(password, 10),
+      roles: { admin: statusRol },
+    });
     const updateUserOne = await userModel.searchDataBase(searchEmailOrId);
     return resp.send({
       _id: updateUserOne._id,

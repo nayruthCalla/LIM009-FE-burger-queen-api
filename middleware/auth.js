@@ -72,7 +72,7 @@ module.exports.requireAdmin = (req, resp, next) => (
 );
 
 module.exports.requireAdminAndOwnerUser = (req, resp, next) => {
-  console.info(req.userAuth);
+  // console.info(req.userAuth);
   // console.info(typeof req.userAuth.id)
   return (!module.exports.isAuthenticated(req))
     ? next(401)
