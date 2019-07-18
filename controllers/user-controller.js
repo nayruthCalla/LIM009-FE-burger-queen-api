@@ -1,4 +1,5 @@
 const ObjectId = require('mongodb').ObjectID;
+const { isAdmin } = require('../middleware/auth');
 
 module.exports = (userModel, bcrypt) => ({
 
@@ -53,6 +54,10 @@ module.exports = (userModel, bcrypt) => ({
     if (!user) {
       return next(404);
     }
+    if (!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
+      return next(403);
+    }
+
     resp.send({
       _id: user._id,
       email: user.email,
@@ -61,22 +66,35 @@ module.exports = (userModel, bcrypt) => ({
   },
   controllerPutUserById: async (req, resp, next) => {
     const { email, password, roles } = req.body;
-    if (!email && !password) {
-      return next(400);
-    }
     const emailOrId = req.params.uid;
     let searchEmailOrId;
-    try {
-      searchEmailOrId = { _id: new ObjectId(emailOrId) };
-    } catch (error) {
+    if (emailOrId.indexOf('@') === -1) {
+      try {
+        searchEmailOrId = { _id: new ObjectId(emailOrId) };
+      } catch (error) {
+        searchEmailOrId = { email: emailOrId };
+      }
+    } else {
       searchEmailOrId = { email: emailOrId };
     }
+
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
     }
+    if (!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
+      return next(403);
+    }
+    
+    if (!isAdmin(req) && roles && roles.admin) {
+      return next(403);
+    }
+    if (!email || !password) {
+      return next(400);
+    }
     const statusRol = (typeof roles === 'object')
       ? (!roles.admin) ? false : roles.admin : false;
+
 
     await userModel.updateDocument(user._id, {
       email: email || user.email,
@@ -93,15 +111,24 @@ module.exports = (userModel, bcrypt) => ({
   controllerDeleteUserById: async (req, resp, next) => {
     const emailOrId = req.params.uid;
     let searchEmailOrId;
-    try {
-      searchEmailOrId = { _id: new ObjectId(emailOrId) };
-    } catch (error) {
+    if (emailOrId.indexOf('@') === -1) {
+      try {
+        searchEmailOrId = { _id: new ObjectId(emailOrId) };
+      } catch (error) {
+        searchEmailOrId = { email: emailOrId };
+      }
+    } else {
       searchEmailOrId = { email: emailOrId };
     }
+
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
     }
+    if (!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
+      return next(403);
+    }
+
     await userModel.deleteDocument(user._id);
     return resp.send({
       _id: user._id,

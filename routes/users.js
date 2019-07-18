@@ -100,7 +100,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, requireAdminAndOwnerUser, userController.controllerGetUserById);
+  app.get('/users/:uid', requireAuth, userController.controllerGetUserById);
 
   /**
    * @name POST /users
@@ -144,7 +144,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, requireAdminAndOwnerUser, changeRoles, userController.controllerPutUserById);
+  app.put('/users/:uid', requireAuth, userController.controllerPutUserById);
 
   /**
    * @name DELETE /users
@@ -162,7 +162,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, requireAdminAndOwnerUser, userController.controllerDeleteUserById);
+  app.delete('/users/:uid', requireAuth, userController.controllerDeleteUserById);
 
   initAdminUser(app, next);
 };

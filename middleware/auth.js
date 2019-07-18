@@ -71,19 +71,15 @@ module.exports.requireAdmin = (req, resp, next) => (
       : next()
 );
 
-module.exports.requireAdminAndOwnerUser = (req, resp, next) => {
+module.exports.requireAdminAndOwnerUser = (req, resp, next) => (
   // console.info(req.userAuth);
   // console.info(typeof req.userAuth.id)
-  return (!module.exports.isAuthenticated(req))
-    ? next(401)
-    : (!module.exports.isAdmin(req))
-      ? (!(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
-        ? next(403)
-        : next()
-      : next();
-};
-
-
+  (!module.exports.isAdmin(req))
+    ? (!(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
+      ? next(403)
+      : next()
+    : next()
+);
 module.exports.changeRoles = (req, resp, next) => {
   const { roles } = req.body;
   return (!module.exports.isAuthenticated(req))
