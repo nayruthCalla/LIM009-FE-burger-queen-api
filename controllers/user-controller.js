@@ -27,7 +27,7 @@ module.exports = userModel => bcrypt => ({
     const limit = parseInt(req.query.limit) || 10;
     const skip = ((limit * page) - limit);
 
-    const users = await userModel.showListCollections(skip, limit);
+    const users = await userModel.showListCollections(skip, limit);    
     const usersList = users.map(user => ({
       _id: user._id,
       email: user.email,
