@@ -11,13 +11,22 @@ module.exports = jest.fn((collection, dbUrl) => ({
   deleteDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
   searchDataBase: jest.fn().mockImplementation((doc) => {
     if (doc.email === 'email already exists') {
-      // console.log('email existe')
+      console.log('poner usuario')
       return Promise.resolve({
         _id: '123', email: 'meseroMock@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
       });
+    } if (doc.email === 'meseroMock@gmail.com') {
+      console.log('no existe')
+
+      return Promise.resolve(null);
+    }
+    if (doc.email === 'meseroMockparaActualizado@gmail.com') {
+      console.log('actualiza')
+      return Promise.resolve({
+        _id: '123', email: 'meseroMockactualizado@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      });
     }
     // console.log('null')
-    return Promise.resolve(null);
   }),
   showListCollections: jest.fn().mockImplementation(() => Promise.resolve({})),
 }));
