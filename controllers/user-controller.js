@@ -17,6 +17,7 @@ module.exports = userModel => bcrypt => ({
       return next(400);
     }
     const user = await userModel.searchDataBase({ email });
+    // console.log(user)
     if (user != null) {
       return next(403);
     }
