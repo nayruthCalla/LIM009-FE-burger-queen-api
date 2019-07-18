@@ -74,10 +74,8 @@ module.exports.requireAdmin = (req, resp, next) => (
 module.exports.requireAdminAndOwnerUser = (req, resp, next) => (
   // console.info(req.userAuth);
   // console.info(typeof req.userAuth.id)
-  (!module.exports.isAdmin(req))
-    ? (!(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
-      ? next(403)
-      : next()
+  (!module.exports.isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
+    ? next(403)
     : next()
 );
 module.exports.changeRoles = (req, resp, next) => {
