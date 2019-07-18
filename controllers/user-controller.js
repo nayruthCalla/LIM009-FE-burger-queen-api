@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+const ObjectId = require('mongodb').ObjectID;
 
 module.exports = (userModel, bcrypt) => ({
 
@@ -37,14 +37,18 @@ module.exports = (userModel, bcrypt) => ({
     resp.send(usersList);
   },
   controllerGetUserById: async (req, resp, next) => {
-    // console.log(req.params.uid)
     const emailOrId = req.params.uid;
     let searchEmailOrId;
-    try {
-      searchEmailOrId = { _id: new ObjectId(emailOrId) };
-    } catch (error) {
+    if (emailOrId.indexOf('@') === -1) {
+      try {
+        searchEmailOrId = { _id: new ObjectId(emailOrId) };
+      } catch (error) {
+        searchEmailOrId = { email: emailOrId };
+      }
+    } else {
       searchEmailOrId = { email: emailOrId };
     }
+
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
@@ -60,7 +64,6 @@ module.exports = (userModel, bcrypt) => ({
     if (!email && !password) {
       return next(400);
     }
-
     const emailOrId = req.params.uid;
     let searchEmailOrId;
     try {
