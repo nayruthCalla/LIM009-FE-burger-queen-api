@@ -61,7 +61,7 @@ describe('GET /users', () => {
         expect(lastQuery.page >= 2).toBe(true);
 
         expect(Array.isArray(json)).toBe(true);
-        expect(json.length).toBe(1);
+        expect(json).toHaveLength(1);
         expect(json[0]).toHaveProperty('_id');
         expect(json[0]).toHaveProperty('email');
         return fetchAsAdmin(nextUrlObj.path);
@@ -85,7 +85,7 @@ describe('GET /users', () => {
         expect(prevQuery.page).toBe('1');
 
         expect(Array.isArray(json)).toBe(true);
-        expect(json.length).toBe(1);
+        expect(json).toHaveLength(1);
         expect(json[0]).toHaveProperty('_id');
         expect(json[0]).toHaveProperty('email');
       })
