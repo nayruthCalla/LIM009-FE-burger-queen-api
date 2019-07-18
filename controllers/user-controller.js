@@ -80,14 +80,12 @@ module.exports = userModel => bcrypt => ({
     if (!user) {
       return next(404);
     }
-    if (!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
+
+    if ((!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) || (!isAdmin(req) && roles && roles.admin)) {
       return next(403);
     }
-    
-    if (!isAdmin(req) && roles && roles.admin) {
-      return next(403);
-    }
-    if (!email || !password) {
+
+    if (!email && !password) {
       return next(400);
     }
     const statusRol = (typeof roles === 'object')

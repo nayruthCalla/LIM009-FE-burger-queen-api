@@ -1,9 +1,12 @@
 const bcrypt = require('bcrypt');
+const { ObjectId } = require('mongodb');
 const db = require('../services/connection');
 const { dbUrl } = require('../config');
 const modelDataBase = require('../models/general-model');
+
 const userModel = modelDataBase('users', dbUrl);
 const modelController = require('../controllers/user-controller');
+
 const userController = modelController(userModel)(bcrypt);
 
 const {
@@ -59,7 +62,26 @@ const initAdminUser = async (app, next) => {
 
 /** @module users */
 module.exports = (app, next) => {
-  // console.log(controllerCreateUser)
+  /*app.param('uid', requireAuth  ,async (req, resp, next, id) => {
+    console.log('holas');
+    let searchEmailOrId;
+    if (id.indexOf('@') === -1) {
+      try {
+        searchEmailOrId = { _id: new ObjectId(id) };
+      } catch (error) {
+        searchEmailOrId = { email: id };
+      }
+    } else {
+      searchEmailOrId = { email: id };
+    }
+
+    const user = await userModel.searchDataBase(searchEmailOrId);
+    if (!user) {
+      return next(404);
+    }
+    return next();
+  });*/
+
   /**
    * @name GET /users
    * @description Lista usuarias
