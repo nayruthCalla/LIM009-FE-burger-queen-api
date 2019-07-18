@@ -51,7 +51,7 @@ describe('POST /orders', () => {
         expect(typeof json._id).toBe('string');
         expect(typeof json.dateEntry).toBe('string');
         expect(Array.isArray(json.products)).toBe(true);
-        expect(json.products.length).toBe(1);
+        expect(json.products).toHaveLength(1);
         expect(json.products[0].product.name).toBe('Test');
         expect(json.products[0].product.price).toBe(10);
       })
@@ -82,7 +82,7 @@ describe('POST /orders', () => {
         expect(typeof json._id).toBe('string');
         expect(typeof json.dateEntry).toBe('string');
         expect(Array.isArray(json.products)).toBe(true);
-        expect(json.products.length).toBe(1);
+        expect(json.products).toHaveLength(1);
         expect(json.products[0].product.name).toBe('Test');
         expect(json.products[0].product.price).toBe(25);
       })
@@ -228,7 +228,7 @@ describe('GET /orders/:orderid', () => {
         return resp.json();
       })
       .then((json) => {
-        expect(json.products.length).toBe(1);
+        expect(json.products).toHaveLength(1);
         expect(json.products[0].product.name).toBe('Test');
         expect(json.products[0].product.price).toBe(99);
       })
@@ -261,7 +261,7 @@ describe('GET /orders/:orderid', () => {
         return resp.json();
       })
       .then((json) => {
-        expect(json.products.length).toBe(1);
+        expect(json.products).toHaveLength(1);
         expect(json.products[0].product.name).toBe('Test');
         expect(json.products[0].product.price).toBe(10);
       })
