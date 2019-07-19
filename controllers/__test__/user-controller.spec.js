@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-identical-title */
 const bcrypt = require('bcrypt');
 const modelController = require('../user-controller');
 
@@ -18,6 +19,7 @@ const next = jest.fn((result => result));
 
 console.info(next(400));
 // userModel.createDocument().then(r => console.log(r));
+/* ------------------post user---------------------------*/
 describe('ControllerCreateUser test', () => {
   it('should return user created ', async (done) => {
     const req = {
@@ -44,6 +46,7 @@ describe('ControllerCreateUser test', () => {
     done();
   });
 });
+/* ------------------put user---------------------------*/
 describe('controllerPutUserById test', () => {
   it('should edit a user', async (done) => {
     const req = {
@@ -58,20 +61,53 @@ describe('controllerPutUserById test', () => {
     expect(result.email).toEqual('meseroMockactualizado@gmail.com');
     done();
   });
-});
-describe('controllerDeleteUserById test', () => {
-  it('should remove a user', async (done) => {
+  it('should return 404 if the user does not succeed', async (done) => {
     const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
       params: {
-        uid: 'meseroMockparaActualizado@gmail.com',
+        uid: 'email that does not exist',
       },
       userAuth: { id: 'meseroMockactualizado@gmail.com', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } },
     };
-    const result = await userController.controllerDeleteUserById(req, resp, next);
-    expect(result).toEqual({ _id: '123', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } });
+    const result = await userController.controllerPutUserById(req, resp, next);
+    expect(result).toEqual(404);
     done();
   });
-  it('should return 404 if the user does not exist', async (done) => {
-    
-  })
+  it('should return 400 if email or password is not provided or neither', async (done) => {
+    const req = {
+      body: new Req('', '', { admin: false }),
+      params: {
+        uid: 'meseroMockparaActualizado@gmail.com',
+      },
+      userAuth: { id: '123', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } },
+    };
+    const result = await userController.controllerPutUserById(req, resp, next);
+    expect(result).toEqual(400);
+    done();
+  });
+  it('should return 403 if the user is not admin and wants to change to admin', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
+      params: {
+        uid: '12345',
+      },
+      userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
+    };
+    const result = await userController.controllerPutUserById(req, resp, next);
+    expect(result).toEqual(403);
+    done();
+  });
+  it('should return 403 if the user is not admin and wants to change to admin', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: true }),
+      params: {
+        uid: '1234',
+      },
+      userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
+    };
+    const result = await userController.controllerPutUserById(req, resp, next);
+    expect(result).toEqual(403);
+    done();
+  });
 });
+

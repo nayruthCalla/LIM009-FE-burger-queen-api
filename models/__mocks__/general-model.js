@@ -26,6 +26,19 @@ module.exports = jest.fn((collection, dbUrl) => ({
         _id: '123', email: 'meseroMockactualizado@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
       });
     }
+    if (doc.email === 'email that does not exist') {
+      return Promise.resolve(null);
+    }
+    if (doc.email === '1234') {
+      return Promise.resolve({
+        _id: '1234', email: 'otroUseario@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      });
+    }
+    if (doc.email === '12345') {
+      return Promise.resolve({
+        _id: '12345', email: 'otroUseario5@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      });
+    }
     // console.log('null')
   }),
   showListCollections: jest.fn().mockImplementation(() => Promise.resolve({})),
