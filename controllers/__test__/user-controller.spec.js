@@ -158,7 +158,7 @@ describe('controllerGetUserById Test', () => {
       userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
     };
     const result = await userController.controllerGetUserById(req, resp, next);
-    expect(result).toEqual({ _id: '1234', email: 'otroUseario@gmail.com', roles: { admin: false }});
+    expect(result).toEqual({ _id: '1234', email: 'otroUseario@gmail.com', roles: { admin: false } });
     done();
   });
   it('should return 404 if the user does not succeed', async (done) => {
