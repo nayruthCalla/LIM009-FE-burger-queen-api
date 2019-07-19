@@ -89,7 +89,7 @@ describe('controllerPutUserById test', () => {
     const req = {
       body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
       params: {
-        uid: '12345',
+        uid: 'otroUseario5@gmail.com',
       },
       userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
     };
@@ -101,7 +101,7 @@ describe('controllerPutUserById test', () => {
     const req = {
       body: new Req('meseroMockactualizado@gmail.com', '123', { admin: true }),
       params: {
-        uid: '1234',
+        uid: 'otroUseario@gmail.com',
       },
       userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
     };
@@ -139,7 +139,7 @@ describe('controllerDeleteUserById test', () => {
     const req = {
       body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
       params: {
-        uid: '12345',
+        uid: 'otroUseario5@gmail.com',
       },
       userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
     };
@@ -149,4 +149,40 @@ describe('controllerDeleteUserById test', () => {
   });
 });
 /* ------------------get user---------------------------*/
-describe('controllerGetUserById Test')
+describe('controllerGetUserById Test', () => {
+  it('should return my data', async (done) => {
+    const req = {
+      params: {
+        uid: 'otroUseario@gmail.com',
+      },
+      userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
+    };
+    const result = await userController.controllerGetUserById(req, resp, next);
+    expect(result).toEqual({ _id: '1234', email: 'otroUseario@gmail.com', roles: { admin: false }});
+    done();
+  });
+  it('should return 404 if the user does not succeed', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
+      params: {
+        uid: 'email that does not exist',
+      },
+      userAuth: { id: 'meseroMockactualizado@gmail.com', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } },
+    };
+    const result = await userController.controllerGetUserById(req, resp, next);
+    expect(result).toEqual(404);
+    done();
+  });
+  it('should return 403 if the user is not admin and wants to change to admin', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
+      params: {
+        uid: 'otroUseario5@gmail.com',
+      },
+      userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
+    };
+    const result = await userController.controllerGetUserById(req, resp, next);
+    expect(result).toEqual(403);
+    done();
+  });
+});

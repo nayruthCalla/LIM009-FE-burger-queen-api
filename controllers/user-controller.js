@@ -47,7 +47,6 @@ module.exports = userModel => bcrypt => ({
     } else {
       searchEmailOrId = { email: emailOrId };
     }
-
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
@@ -56,7 +55,7 @@ module.exports = userModel => bcrypt => ({
       return next(403);
     }
 
-    resp.send({
+    return resp.send({
       _id: user._id,
       email: user.email,
       roles: user.roles,
