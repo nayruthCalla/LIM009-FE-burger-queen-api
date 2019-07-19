@@ -34,12 +34,12 @@ module.exports = userModel => bcrypt => ({
     const count = await userModel.countCollections();
     const numPages = Math.ceil(count / limit);
 
-    const firstPage = `</users?page=${numPages - (numPages - 1)}&&limit=${limit}> ; rel = "first"`;
-    const lastPage = `</users?page=${numPages}&&limit=${limit}> ; rel = "last"`;
-    const prevPage = `</users?page=${page - 1 === 0 ? 1 : page - 1}&&limit=${limit}> ; rel = "prev"`;
-    const nextPage = `</users?page=${page === numPages ? page : page + 1}&&limit=${limit}> ; rel = "next"`;
+    const firstPage = `</users?page=${numPages - (numPages - 1)}&&limit=${limit}>; rel="first"`;
+    const lastPage = `</users?page=${numPages}&&limit=${limit}>; rel="last"`;
+    const prevPage = `</users?page=${page - 1 === 0 ? 1 : page - 1}&&limit=${limit}>; rel="prev"`;
+    const nextPage = `</users?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
 
-    resp.set('link', `${firstPage},${lastPage},${prevPage},${nextPage}`);
+    resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
 
     /*  resp.set('Link': `<${firstPage}>`; rel = "first", `<${lastPage}>`; rel = 'last',`<${prevPage}>`; rel = 'prev', `<${nextPage}>`; rel = 'next');
       */
