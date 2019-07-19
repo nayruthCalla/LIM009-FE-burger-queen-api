@@ -1,3 +1,12 @@
+const { dbUrl } = require('../config');
+const modelDataBase = require('../models/general-model');
+
+const productModel = modelDataBase('products', dbUrl);
+
+const modelController = require('../controllers/product-controller');
+
+const productsController = modelController(productModel);
+
 const {
   requireAuth,
   requireAdmin,
@@ -71,8 +80,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es admin
    * @code {404} si el producto con `productId` indicado no existe 
    */
-  app.post('/products', requireAdmin, (req, resp, next) => {
-  });
+  app.post('/products', requireAdmin, productsController.controllerCreateProduct);
 
 
   /**
@@ -98,7 +106,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es admin
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.put('/products/:productId', requireAdmin, );
+  app.put('/products/:productId', requireAdmin, productsController.controllerPutProduct);
 
   /**
    * @name DELETE /products
@@ -118,8 +126,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es ni admin
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.delete('/products/:productId', requireAdmin, (req, resp, next) => {
-  });
+  app.delete('/products/:productId', requireAdmin, productsController.controllerDeleteProduct);
 
   nextMain();
 };
