@@ -35,7 +35,7 @@ module.exports = (collection, dbUrl) => ({
     return result;
   },
   countCollections: async () => {
-    const result = await (await db(dbUrl)).collection(collection).count();
+    const result = await (await db(dbUrl)).collection(collection).countDocuments();
     return result;
   },
 });
