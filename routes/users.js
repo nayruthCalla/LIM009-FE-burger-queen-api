@@ -62,7 +62,7 @@ const initAdminUser = async (app, next) => {
 
 /** @module users */
 module.exports = (app, next) => {
-  /*app.param('uid', requireAuth  ,async (req, resp, next, id) => {
+  /* app.param('uid', requireAuth  ,async (req, resp, next, id) => {
     console.log('holas');
     let searchEmailOrId;
     if (id.indexOf('@') === -1) {
@@ -80,7 +80,7 @@ module.exports = (app, next) => {
       return next(404);
     }
     return next();
-  });*/
+  }); */
 
   /**
    * @name GET /users
