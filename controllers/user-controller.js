@@ -72,7 +72,6 @@ module.exports = userModel => bcrypt => ({
     if (!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
       return next(403);
     }
-
     return resp.send({
       _id: user._id,
       email: user.email,
@@ -97,15 +96,6 @@ module.exports = userModel => bcrypt => ({
     if (!user) {
       return next(404);
     }
-//     console.log(!isAdmin(req))
-//     console.log(req.userAuth.id === req.params.uid )
-//     console.log(req.userAuth.email === req.params.uid)
-//     console.log(!isAdmin(req) )
-//     console.log( roles)
-//     console.log(roles.admin)
-//     console.log()
-//     console.log()
-// console.log((!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) || (!isAdmin(req) && roles && roles.admin))
     if ((!isAdmin(req) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) || (!isAdmin(req) && roles && roles.admin)) {
       return next(403);
     }
@@ -145,14 +135,10 @@ module.exports = userModel => bcrypt => ({
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
-    }
-    // console.log(!(isAdmin(req).admin))
-    // console.log(!(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
-    // console.log(!(isAdmin(req)) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid))
+    }    
     if (!(isAdmin(req)) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
       return next(403);
     }
-
     await userModel.deleteDocument(user._id);
     return resp.send({
       _id: user._id,
