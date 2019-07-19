@@ -110,4 +110,43 @@ describe('controllerPutUserById test', () => {
     done();
   });
 });
-
+/* ------------------delete user---------------------------*/
+describe('controllerDeleteUserById test', () => {
+  it('should remove a user', async (done) => {
+    const req = {
+      params: {
+        uid: 'meseroMockparaActualizado@gmail.com',
+      },
+      userAuth: { id: '123', email: 'meseroMockparaActualizado@gmail.com', roles: { admin: false } },
+    };
+    const result = await userController.controllerDeleteUserById(req, resp, next);
+    expect(result).toEqual({ _id: '123', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } });
+    done();
+  });
+  it('should return 404 if the user does not exist', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
+      params: {
+        uid: 'email that does not exist',
+      },
+      userAuth: { id: 'meseroMockactualizado@gmail.com', email: 'meseroMockactualizado@gmail.com', roles: { admin: false } },
+    };
+    const result = await userController.controllerDeleteUserById(req, resp, next);
+    expect(result).toEqual(404);
+    done();
+  });
+  it('should return 403 if the user is not admin and wants to change to admin', async (done) => {
+    const req = {
+      body: new Req('meseroMockactualizado@gmail.com', '123', { admin: false }),
+      params: {
+        uid: '12345',
+      },
+      userAuth: { id: '1234', email: 'otroUseario@gmail.com', roles: false },
+    };
+    const result = await userController.controllerDeleteUserById(req, resp, next);
+    expect(result).toEqual(403);
+    done();
+  });
+});
+/* ------------------get user---------------------------*/
+describe('controllerGetUserById Test')
