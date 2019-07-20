@@ -22,7 +22,7 @@ module.exports = userModel => bcrypt => ({
       roles: newUser.ops[0].roles,
     });
   },
-  controllerGetAllUsers: async (req, resp) => {
+  controllerGetAllProduct: async (req, resp) => {
     // console.info(req.query);
     const page = parseInt(req.query.page) || 1;
     console.log(page);

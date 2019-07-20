@@ -5,7 +5,6 @@ module.exports = productModel => ({
     const {
       name, price, image, type,
     } = req.body;
-
     if (!name || !price || typeof price !== 'number') {
       return next(400);
     }
@@ -43,6 +42,38 @@ module.exports = productModel => ({
       type: product.type,
       dateEntry: product.dateEntry,
     });
+  },
+  controllerGetAllUsers: async (req, resp) => {
+    console.log(req.query)
+    const page = parseInt(req.query.page) || 1;
+    console.log(page);
+    resp.send(page);
+    // const limit = parseInt(req.query.limit) || 10;
+    // const skip = ((limit * page) - limit);
+
+    // const users = await userModel.showListCollections(skip, limit);
+
+    // const count = await userModel.countCollections();
+    // const numPages = Math.ceil(count / limit);
+
+    // const firstPage = `</users?page=${numPages - (numPages - 1)}&&limit=${limit}>; rel="first"`;
+    // const lastPage = `</users?page=${numPages}&&limit=${limit}>; rel="last"`;
+    // const prevPage = `</users?page=${page - 1 === 0 ? 1 : page - 1}&&limit=${limit}>; rel="prev"`;
+    // const nextPage = `</users?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
+
+    // resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
+
+    // /*  resp.set('Link': `<${firstPage}>`; rel = "first", `<${lastPage}>`; rel = 'last',`<${prevPage}>`; rel = 'prev', `<${nextPage}>`; rel = 'next');
+    //   */
+    // const usersList = users.map(user => ({
+    //   _id: user._id,
+    //   email: user.email,
+    //   roles: { admin: user.roles.admin },
+    // }));
+    // resp.send(usersList);
+
+
+    // console.log(count, numPages);
   },
   controllerPutProduct: async (req, resp, next) => {
     const {

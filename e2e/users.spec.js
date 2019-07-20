@@ -148,6 +148,7 @@ describe('POST /users', () => {
   it('FIXME: should fail with 400 when invalid password', () => { });
 
   it('should create new user', () => {
+    
     fetchAsAdmin('/users', {
       method: 'POST',
       body: {
