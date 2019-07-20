@@ -48,4 +48,17 @@ module.exports = orderModel => ({
 
     return resp.send(orders);
   },
+  controllerGetorderById: async (req, resp, next) => {
+    try {
+      const { orderid } = req.params;
+      const ordersIdDb = { _id: new ObjectId(orderid) };
+      const order = await orderModel.searchDataBase(ordersIdDb);
+      if (!order) {
+        return next(404);
+      }
+      return resp.send(order);
+    } catch (error) {
+      return next(404);
+    }
+  },
 });
