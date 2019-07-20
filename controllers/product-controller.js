@@ -57,5 +57,25 @@ module.exports = productModel => ({
       dateEntry: updateProduct.dateEntry,
     });
   },
-  
+  controllerDeleteProduct: async (req, resp, next) => {
+    const { productId } = req.params;
+    let productIdDb;
+    try {
+      productIdDb = { _id: new ObjectId(productId) };
+    } catch (error) {
+      productIdDb = { _id: productId };
+    }
+    const product = await productModel.searchDataBase(productIdDb);
+    if (!product) {
+      return next(404);
+    }
+    return resp.send({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      type: product.type,
+      dateEntry: product.dateEntry,
+    });
+  },
 });
