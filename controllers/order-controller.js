@@ -26,5 +26,26 @@ module.exports = orderModel => ({
     });
     return resp.send(newOrder.ops[0]);
   },
-  
+  controllerGetAllorders: async (req, resp, next) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = ((limit * page) - limit);
+
+    const orders = await orderModel.showListCollections(skip, limit);
+    if (!orders) {
+      return next(404);
+    }
+
+    const count = await orderModel.countCollections();
+    const numPages = Math.ceil(count / limit);
+
+    const firstPage = `</orders?page=${numPages - (numPages - 1)}&&limit=${limit}>; rel="first"`;
+    const lastPage = `</orders?page=${numPages}&&limit=${limit}>; rel="last"`;
+    const prevPage = `</orders?page=${page - 1 === 0 ? 1 : page - 1}&&limit=${limit}>; rel="prev"`;
+    const nextPage = `</orders?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
+
+    resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
+
+    return resp.send(orders);
+  },
 });
