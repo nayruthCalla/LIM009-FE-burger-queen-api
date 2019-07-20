@@ -37,12 +37,13 @@ describe('POST /products', () => {
       })
   ));
 });
+
+
 describe('GET /products', () => {
   it('should get products with Auth', () => (
     fetchAsTestUser('/products')
       .then((resp) => {
         expect(resp.status).toBe(200);
-        // console.log(resp)
         return resp.json();
       })
       .then((json) => {
@@ -65,7 +66,6 @@ describe('GET /products/:productid', () => {
   it('should get product with Auth', () => (
     fetchAsTestUser('/products')
       .then((resp) => {
-        // console.log(resp)
         expect(resp.status).toBe(200);
         return resp.json();
       })

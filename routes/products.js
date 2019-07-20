@@ -31,8 +31,7 @@ module.exports = (app, nextMain) => {
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    */
-  app.get('/products', requireAuth, productController.controllerGetAllProduct);
-
+  app.get('/products', requireAuth, productController.controllerGetAllProducts);
   /**
    * @name GET /products/:productId
    * @description Obtiene los datos de un producto especifico
