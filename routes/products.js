@@ -5,7 +5,7 @@ const productModel = modelDataBase('products', dbUrl);
 
 const modelController = require('../controllers/product-controller');
 
-const productsController = modelController(productModel);
+const productController = modelController(productModel);
 
 const {
   requireAuth,
@@ -39,6 +39,7 @@ module.exports = (app, nextMain) => {
    * @description Obtiene los datos de un producto especifico
    * @path {GET} /products/:productId
    * @params {String} :productId `id` del producto
+   * @'?????
    * @body {String} name Nombre
    * @body {Number} price Precio
    * @body {String} [imagen='']  URL a la imagen
@@ -55,8 +56,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.get('/products/:productId', requireAuth, (req, resp, next) => {
-  });
+  app.get('/products/:productId', requireAuth, productController.controllerGetProductById);
 
   /**
    * @name POST /products
@@ -80,7 +80,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es admin
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.post('/products', requireAdmin, productsController.controllerCreateProducts);
+  app.post('/products', requireAdmin, productController.controllerCreateProduct);
 
 
   /**
