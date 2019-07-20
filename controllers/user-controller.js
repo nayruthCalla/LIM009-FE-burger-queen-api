@@ -22,7 +22,7 @@ module.exports = userModel => bcrypt => ({
       roles: newUser.ops[0].roles,
     });
   },
-  controllerGetAllProduct: async (req, resp) => {
+  controllerGetAllUsers: async (req, resp) => {
     // console.info(req.query);
     const page = parseInt(req.query.page) || 1;
     console.log(page);
@@ -48,10 +48,10 @@ module.exports = userModel => bcrypt => ({
       email: user.email,
       roles: { admin: user.roles.admin },
     }));
-    resp.send(usersList);
+    return resp.send(usersList);
 
 
-    console.log(count, numPages);
+    // console.log(count, numPages);
   },
   controllerGetUserById: async (req, resp, next) => {
     const emailOrId = req.params.uid;

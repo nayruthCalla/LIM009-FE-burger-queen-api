@@ -1,3 +1,10 @@
+const { dbUrl } = require('../config');
+const modelDataBase = require('../models/general-model');
+
+const orderModel = modelDataBase('orders', dbUrl);
+const modelController = require('../controllers/order-controller');
+
+const orderController = modelController(orderModel);
 const {
   requireAuth,
 } = require('../middleware/auth');
@@ -25,8 +32,7 @@ module.exports = (app, nextMain) => {
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    */
-  app.get('/orders', requireAuth, (req, resp, next) => {
-  });
+  app.get('/orders', requireAuth, orderController.controllerGetAllorders);
 
   /**
    * @name GET /orders/:orderId
@@ -49,8 +55,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si la orden con `orderId` indicado no existe
    */
-  app.get('/orders/:orderid', requireAuth, (req, resp, next) => {
-  });
+  app.get('/orders/:orderid', requireAuth, orderController.controllerGetorderById);
 
   /**
    * @name POST /orders
@@ -78,8 +83,7 @@ module.exports = (app, nextMain) => {
    * @code {400} no se indica `userId` o se intenta crear una orden sin productos
    * @code {401} si no hay cabecera de autenticación
    */
-  app.post('/orders', requireAuth, (req, resp, next) => {
-  });
+  app.post('/orders', requireAuth, orderController.controllerCreateOrder);
 
   /**
    * @name PUT /orders
