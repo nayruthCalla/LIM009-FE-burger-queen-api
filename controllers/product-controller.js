@@ -31,7 +31,6 @@ module.exports = productModel => ({
     const nextPage = `</products?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
 
     resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
-console.log((products))
     return resp.send(products);
   },
   controllerGetProductById: async (req, resp, next) => {

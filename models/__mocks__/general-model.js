@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 
 const id = { _id: new ObjectId('5d2b074c8d949249fa60e5fe') };
+
 module.exports = jest.fn((collection, dbUrl) => ({
   createDocument: jest.fn().mockImplementation(() => Promise.resolve({
     ops: [{

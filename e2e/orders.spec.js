@@ -79,13 +79,6 @@ describe('POST /orders', () => {
         return resp.json();
       })
       .then((json) => {     
-        console.log(json)
-        console.log(typeof json._id)
-        console.log(typeof json.dateEntry)
-        console.log(Array.isArray(json.products))
-        console.log(json.products)
-        console.log(json.products[0].product.name)
-        console.log(json.products[0].product.price)
         expect(typeof json._id).toBe('string');
         expect(typeof json.dateEntry).toBe('string');
         expect(Array.isArray(json.products)).toBe(true);
