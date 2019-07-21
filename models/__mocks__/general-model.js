@@ -1,47 +1,117 @@
-const { ObjectId } = require('mongodb');
-
-const id = { _id: new ObjectId('5d2b074c8d949249fa60e5fe') };
-
-module.exports = jest.fn((collection, dbUrl) => ({
+/* eslint-disable no-unused-vars */
+const userModelGeneral = jest.fn((collection, dbUrl) => ({
   createDocument: jest.fn().mockImplementation(() => Promise.resolve({
     ops: [{
-      _id: '123', email: 'meseroMock@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      _id: '12345', email: 'user@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
     }],
   })),
-  updateDocument: jest.fn().mockImplementation(() => Promise.resolve({ email: 'nayruthupdate@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: true } })),
+  updateDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
   deleteDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
   searchDataBase: jest.fn().mockImplementation((doc) => {
+    if (doc.email === 'userToUpdate@gmail.com') {
+      return Promise.resolve({
+        _id: '12345', email: 'updatedUser@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      });
+    }
+    if (doc.email === 'user002@gmail.com') {
+      return Promise.resolve({
+        _id: '12345', email: 'user002@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: true },
+      });
+    }
+    if (doc.email === 'user003@gmail.com') {
+      return Promise.resolve({
+        _id: '12345', email: 'user003@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+      });
+    }
     if (doc.email === 'email already exists') {
-      // console.log('poner usuario')
       return Promise.resolve({
-        _id: '123', email: 'meseroMock@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
-      });
-    } if (doc.email === 'meseroMock@gmail.com') {
-      // console.log('no existe')
-
-      return Promise.resolve(null);
-    }
-    if (doc.email === 'meseroMockparaActualizado@gmail.com') {
-      // console.log('actualiza')
-      return Promise.resolve({
-        _id: '123', email: 'meseroMockactualizado@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+        _id: '12345', email: 'user@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
       });
     }
-    if (doc.email === 'email that does not exist') {
-      return Promise.resolve(null);
-    }
-    if (doc.email === 'otroUseario@gmail.com') {
-    // console.log('1234')
-      return Promise.resolve({
-        _id: '1234', email: 'otroUseario@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
-      });
-    }
-    if (doc.email === 'otroUseario5@gmail.com') {
-      return Promise.resolve({
-        _id: '12345', email: 'otroUseario5@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
-      });
-    }
-    // console.log('null')
+    return Promise.resolve(null);
   }),
-  showListCollections: jest.fn().mockImplementation(() => Promise.resolve({})),
+  showListCollections: jest.fn().mockImplementation(() => Promise.resolve([
+    {
+      _id: '12345a', email: 'admin@localhost', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: true },
+    },
+    {
+      _id: '12345b', email: 'user01@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+    },
+    {
+      _id: '12345c', email: 'user02@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+    },
+    {
+      _id: '12345d', email: 'user03@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
+    },
+  ])),
+  countCollections: jest.fn().mockImplementation(() => Promise.resolve(12)),
 }));
+
+const productModelGeneral = jest.fn((collection, dbUrl) => ({
+  createDocument: jest.fn().mockImplementation(() => Promise.resolve({
+    ops: [{
+      _id: '5d328d66976faf100edae191',
+      name: 'hamburguesa',
+      price: 6.7,
+      image: 'http://localhost:8080/products/img/hamburguesa.png',
+      type: 'frituras',
+      dateEntry: '2019-07-20T03:41:26.873Z',
+    }],
+  })),
+  updateDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
+  deleteDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
+  searchDataBase: jest.fn().mockImplementation((doc) => {
+    const idProduct = (doc._id).toString();
+    if (idProduct === '5d328d66976faf100edae191') {
+      return Promise.resolve({
+        _id: '5d328d66976faf100edae191',
+        name: 'hamburguesa gourmet',
+        price: 6.7,
+        image: 'http://localhost:8080/products/img/hamburguesa.png',
+        type: 'combo',
+        dateEntry: '2019-07-20T03:41:26.873Z',
+      });
+    }
+    return Promise.resolve(null);
+  }),
+  showListCollections: jest.fn().mockImplementation(() => Promise.resolve([
+    {
+      _id: '5d328d66976faf100edae191',
+      name: 'hamburguesa gourmet1',
+      price: 6.7,
+      image: 'http://localhost:8080/products/img/hamburguesa.png',
+      type: 'combo',
+      dateEntry: '2019-07-20T03:41:26.873Z',
+    },
+    {
+      _id: '5d328d66976faf100edae191',
+      name: 'hamburguesa gourmet2',
+      price: 6.7,
+      image: 'http://localhost:8080/products/img/hamburguesa.png',
+      type: 'combo',
+      dateEntry: '2019-07-20T03:41:26.873Z',
+    },
+    {
+      _id: '5d328d66976faf100edae191',
+      name: 'hamburguesa gourmet3',
+      price: 6.7,
+      image: 'http://localhost:8080/products/img/hamburguesa.png',
+      type: 'combo',
+      dateEntry: '2019-07-20T03:41:26.873Z',
+    },
+    {
+      _id: '5d328d66976faf100edae191',
+      name: 'hamburguesa gourmet4',
+      price: 6.7,
+      image: 'http://localhost:8080/products/img/hamburguesa.png',
+      type: 'combo',
+      dateEntry: '2019-07-20T03:41:26.873Z',
+    },
+  ])),
+  countCollections: jest.fn().mockImplementation(() => Promise.resolve(8)),
+}));
+
+module.exports = {
+  userModelGeneral,
+  productModelGeneral,
+};

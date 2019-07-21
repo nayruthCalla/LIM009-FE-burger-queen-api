@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable radix */
 const { ObjectId } = require('mongodb');
 const { isAdmin } = require('../middleware/auth');
@@ -15,7 +16,9 @@ module.exports = userModel => bcrypt => ({
     const statusRol = (typeof roles === 'object')
       ? (!roles.admin) ? false : roles.admin
       : false;
-    const newUser = await userModel.createDocument({ email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol } });
+    const newUser = await userModel.createDocument({
+      email, password: bcrypt.hashSync(password, 10), roles: { admin: statusRol },
+    });
     return resp.send({
       _id: newUser.ops[0]._id,
       email: newUser.ops[0].email,
@@ -25,7 +28,6 @@ module.exports = userModel => bcrypt => ({
   controllerGetAllUsers: async (req, resp) => {
     // console.info(req.query);
     const page = parseInt(req.query.page) || 1;
-    console.log(page);
     const limit = parseInt(req.query.limit) || 10;
     const skip = ((limit * page) - limit);
 
@@ -40,18 +42,14 @@ module.exports = userModel => bcrypt => ({
     const nextPage = `</users?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
 
     resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
+    // resp.set('Link': `<${firstPage}>`; rel = "first", `<${lastPage}>`; rel = 'last',`<${prevPage}>`; rel = 'prev', `<${nextPage}>`; rel = 'next');
 
-    /*  resp.set('Link': `<${firstPage}>`; rel = "first", `<${lastPage}>`; rel = 'last',`<${prevPage}>`; rel = 'prev', `<${nextPage}>`; rel = 'next');
-      */
     const usersList = users.map(user => ({
       _id: user._id,
       email: user.email,
       roles: { admin: user.roles.admin },
     }));
     return resp.send(usersList);
-
-
-    // console.log(count, numPages);
   },
   controllerGetUserById: async (req, resp, next) => {
     const emailOrId = req.params.uid;
@@ -135,7 +133,7 @@ module.exports = userModel => bcrypt => ({
     const user = await userModel.searchDataBase(searchEmailOrId);
     if (!user) {
       return next(404);
-    }    
+    }
     if (!(isAdmin(req)) && !(req.userAuth.id === req.params.uid || req.userAuth.email === req.params.uid)) {
       return next(403);
     }

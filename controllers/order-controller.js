@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable radix */
 const { ObjectId } = require('mongodb');
 const { dbUrl } = require('../config');

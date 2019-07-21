@@ -41,7 +41,6 @@ module.exports = productModel => ({
       if (!product) {
         return next(404);
       }
-      console.log(resp.send(product))
       return resp.send(product);
     } catch (error) {
       return next(404);
@@ -54,7 +53,8 @@ module.exports = productModel => ({
       } = req.body;
       const { productId } = req.params;
       const productIdDb = { _id: new ObjectId(productId) };
-      if ((!name && !price && !image && !type) || (typeof price !== 'number')) {
+
+      if ((!name && !price && !image && !type) || (price && typeof price !== 'number')) {
         return next(400);
       }
       const product = await productModel.searchDataBase(productIdDb);
