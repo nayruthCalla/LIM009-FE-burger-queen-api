@@ -76,7 +76,7 @@ module.exports = (app, nextMain) => {
    * @code {400} si no se indican `name` o `price`
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es admin
-   * @code {404} si el producto con `productId` indicado no existe 
+   * @code {404} si el producto con `productId` indicado no existe
    */
   app.post('/products', requireAdmin, productController.controllerCreateProduct);
 

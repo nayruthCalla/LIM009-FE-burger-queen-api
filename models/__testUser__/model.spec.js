@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-unused-vars */
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
@@ -44,7 +47,6 @@ describe('Base de datos en memoria', () => {
     };
     await createUsersMany(1, 10);
     const users = await userController.showListCollections(5, 10);
-    // console.info(users);
     expect(users[0].email).toEqual('user006@localhost');
     expect(users[4].email).toEqual('user0010@localhost');
   });

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const db = require('../services/connection');

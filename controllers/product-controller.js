@@ -31,7 +31,6 @@ module.exports = productModel => ({
     const nextPage = `</products?page=${page === numPages ? page : page + 1}&&limit=${limit}>; rel="next"`;
 
     resp.set('link', `${firstPage}, ${lastPage}, ${prevPage}, ${nextPage}`);
-console.log((products))
     return resp.send(products);
   },
   controllerGetProductById: async (req, resp, next) => {
@@ -42,7 +41,6 @@ console.log((products))
       if (!product) {
         return next(404);
       }
-      console.log(resp.send(product))
       return resp.send(product);
     } catch (error) {
       return next(404);
@@ -55,7 +53,8 @@ console.log((products))
       } = req.body;
       const { productId } = req.params;
       const productIdDb = { _id: new ObjectId(productId) };
-      if ((!name && !price && !image && !type) || (typeof price !== 'number')) {
+
+      if ((!name && !price && !image && !type) || (price && typeof price !== 'number')) {
         return next(400);
       }
       const product = await productModel.searchDataBase(productIdDb);

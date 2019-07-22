@@ -55,7 +55,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si la orden con `orderId` indicado no existe
    */
-  app.get('/orders/:orderid', requireAuth, orderController.controllerGetorderById);
+  app.get('/orders/:orderid', requireAuth, orderController.controllerGetOrderById);
 
   /**
    * @name POST /orders
@@ -113,8 +113,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si la orderId con `orderId` indicado no existe
    */
-  app.put('/orders/:orderid', requireAuth, (req, resp, next) => {
-  });
+  app.put('/orders/:orderid', requireAuth, orderController.controllerPutOrderById);
 
   /**
    * @name DELETE /orders
@@ -137,8 +136,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si el producto con `orderId` indicado no existe
    */
-  app.delete('/orders/:orderid', requireAuth, (req, resp, next) => {
-  });
+  app.delete('/orders/:orderid', requireAuth, orderController.controllerDeleteOrderById);
 
   nextMain();
 };

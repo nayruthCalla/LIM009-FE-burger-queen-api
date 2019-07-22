@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { ObjectId } = require('mongodb');
 const db = require('../services/connection');
 const { dbUrl } = require('../config');
 const modelDataBase = require('../models/general-model');
