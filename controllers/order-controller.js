@@ -12,6 +12,14 @@ module.exports = orderModel => ({
     if (!userId || !products) {
       return next(400);
     }
+    /* const arrayProducts = products.map((element) => {
+      const productId = new ObjectId(element.product);
+      return { product: productId, qty: element.qty };
+    });
+    await orderModel.createDocument({
+      userId, client, products: arrayProducts, status: 'pending', dateEntry: new Date(),
+    });  */
+
     const arrayProducts = products.map(async (element) => {
       const productId = element.product;
       const ObjProduct = await productModel.searchDataBase({ _id: new ObjectId(productId) });
@@ -54,37 +62,37 @@ module.exports = orderModel => ({
     }
   },
   controllerPutOrderById: async (req, resp, next) => {
-  /*  try {
-      const {
-        userId, client, products, status,
-      } = req.body;
-      const { orderid } = req.params;
-      const ordersIdDb = { _id: new ObjectId(orderid) };
-      console.log(ordersIdDb);
-
-      if (!userId && !client && !products && !status) {
-        return next(400);
-      }
-
-      if (status && (status !== 'pending' || status !== 'canceled' || status !== 'delivering' || status !== 'delivered')) {
-        return next(400);
-      }
-
-      const order = await orderModel.searchDataBase(ordersIdDb);
-      if (!order) {
-        return next(401);
-      }
-
-      await orderModel.updateDocument({ _id: order._id, 'products.$.product.productId': new ObjectId(products[0].productId) },
-        {
-          $set: { 'products.$.qty': products[0].qty },
-        });
-      const updateOrder = await orderModel.searchDataBase(ordersIdDb);
-      return resp.send(updateOrder);
+    const {
+      userId, client, products, status,
+    } = req.body;
+    const { orderid } = req.params;
+    let ordersIdDb;
+    try {
+      ordersIdDb = { _id: new ObjectId(orderid) };
     } catch (error) {
       console.info(error);
-      // return next(404);
-    } */
+      return next(403);
+    }
+    
+    if (!userId && !client && !products && !status) {
+      return next(400);
+    }
+
+    if (status && (status !== 'pending' || status !== 'canceled' || status !== 'delivering' || status !== 'delivered')) {
+      return next(400);
+    }
+
+    const order = await orderModel.searchDataBase(ordersIdDb);
+    if (!order) {
+      return next(404);
+    }
+
+    // await orderModel.updateDocument({ _id: order._id, 'products.$.product.productId': new ObjectId(products[0].productId) },
+    //   {
+    //     $set: { 'products.$.qty': products[0].qty },
+    //   });
+    // const updateOrder = await orderModel.searchDataBase(ordersIdDb);
+    // return resp.send(updateOrder);
   },
   controllerDeleteOrderById: async (req, resp, next) => {
     try {
