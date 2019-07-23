@@ -1,3 +1,4 @@
+/* eslint-disable jest/valid-expect-in-promise */
 const url = require('url');
 const qs = require('querystring');
 const config = require('../config');
@@ -148,7 +149,6 @@ describe('POST /users', () => {
   it('FIXME: should fail with 400 when invalid password', () => { });
 
   it('should create new user', () => {
-    
     fetchAsAdmin('/users', {
       method: 'POST',
       body: {
