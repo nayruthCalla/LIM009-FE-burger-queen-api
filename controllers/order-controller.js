@@ -8,6 +8,14 @@ module.exports = (orderModel, productModel) => ({
     if (!userId || !products) {
       return next(400);
     }
+    /* const arrayProducts = products.map((element) => {
+      const productId = new ObjectId(element.product);
+      return { product: productId, qty: element.qty };
+    });
+    await orderModel.createDocument({
+      userId, client, products: arrayProducts, status: 'pending', dateEntry: new Date(),
+    });  */
+
     const arrayProducts = products.map(async (element) => {
       const productId = element.product;
       const ObjProduct = await productModel.searchDataBase({ _id: new ObjectId(productId) });
