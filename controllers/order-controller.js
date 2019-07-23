@@ -1,12 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable radix */
 const { ObjectId } = require('mongodb');
-const { dbUrl } = require('../config');
-const modelDataBase = require('../models/general-model');
 
-const productModel = modelDataBase('products', dbUrl);
-
-module.exports = orderModel => ({
+module.exports = (orderModel, productModel) => ({
   controllerCreateOrder: async (req, resp, next) => {
     const { userId, client, products } = req.body;
     if (!userId || !products) {
@@ -54,37 +50,31 @@ module.exports = orderModel => ({
     }
   },
   controllerPutOrderById: async (req, resp, next) => {
-  /*  try {
-      const {
-        userId, client, products, status,
-      } = req.body;
-      const { orderid } = req.params;
-      const ordersIdDb = { _id: new ObjectId(orderid) };
-      console.log(ordersIdDb);
-
-      if (!userId && !client && !products && !status) {
-        return next(400);
-      }
-
-      if (status && (status !== 'pending' || status !== 'canceled' || status !== 'delivering' || status !== 'delivered')) {
-        return next(400);
-      }
-
-      const order = await orderModel.searchDataBase(ordersIdDb);
-      if (!order) {
-        return next(401);
-      }
-
-      await orderModel.updateDocument({ _id: order._id, 'products.$.product.productId': new ObjectId(products[0].productId) },
-        {
-          $set: { 'products.$.qty': products[0].qty },
-        });
-      const updateOrder = await orderModel.searchDataBase(ordersIdDb);
-      return resp.send(updateOrder);
+    const {
+      userId, client, products, status,
+    } = req.body;
+    const { orderid } = req.params;
+    let ordersIdDb;
+    try {
+      ordersIdDb = { _id: new ObjectId(orderid) };
+      // console.log(ordersIdDb);
     } catch (error) {
       console.info(error);
       // return next(404);
-    } */
+    }
+    const order = await orderModel.searchDataBase(ordersIdDb);
+    if (!order || status === 'canceled') {
+      return next(404);
+    }
+    // eslint-disable-next-line no-mixed-operators
+    if ((!userId && !client && !products && !status) || (status !== 'preparing' && status !== 'pending' && status !== 'canceled' && status !== 'delivering' && status !== 'delivered')) {
+      return next(400);
+    }
+    await orderModel.updateDocument(order._id, {
+      userId, client, products, status,
+    });
+    const updateOrder = await orderModel.searchDataBase(ordersIdDb);
+    return resp.send(updateOrder);
   },
   controllerDeleteOrderById: async (req, resp, next) => {
     try {
@@ -92,6 +82,9 @@ module.exports = orderModel => ({
       const ordersIdDb = { _id: new ObjectId(orderid) };
       const order = await orderModel.searchDataBase(ordersIdDb);
       if (!order) {
+        return next(404);
+      }
+      if (req.params === undefined) {
         return next(404);
       }
       await orderModel.deleteDocument(order._id);
