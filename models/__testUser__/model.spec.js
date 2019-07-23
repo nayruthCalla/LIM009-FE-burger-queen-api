@@ -15,6 +15,7 @@ describe('Base de datos en memoria', () => {
     dbUrl = await mongoServer.getConnectionString();
     userController = modelDataBase('users', dbUrl);
   });
+
   it('Insertando un Documento en BD', async () => {
     const mockUser = { email: 'mesero@gmail.com', password: bcrypt.hashSync('123', 10) };
     const insertedUser = await userController.createDocument(mockUser);
