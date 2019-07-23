@@ -67,8 +67,8 @@ module.exports = (orderModel, productModel) => ({
       ordersIdDb = { _id: new ObjectId(orderid) };
       // console.log(ordersIdDb);
     } catch (error) {
-      console.info(error);
-      // return next(404);
+      // console.info(error);
+      // return next(401);
     }
     const order = await orderModel.searchDataBase(ordersIdDb);
     if (!order || status === 'canceled') {
@@ -90,9 +90,6 @@ module.exports = (orderModel, productModel) => ({
       const ordersIdDb = { _id: new ObjectId(orderid) };
       const order = await orderModel.searchDataBase(ordersIdDb);
       if (!order) {
-        return next(404);
-      }
-      if (req.params === undefined) {
         return next(404);
       }
       await orderModel.deleteDocument(order._id);

@@ -3,9 +3,10 @@ const modelController = require('../order-controller');
 jest.mock('../../models/general-model');
 const { orderModelGeneral } = require('../../models/general-model');
 
-const orderModel = orderModelGeneral('users', 'dbUrl default');
+
+const orderModel = orderModelGeneral();
 // const bdProduc = () =>
-const productModel = jest.fn((collection, dbUrl) => ({
+const productModel = jest.fn(() => ({
   searchDataBase: jest.fn().mockImplementation(() => Promise.resolve({
     _id: '5d328d66976faf100edae191',
     name: 'hamburguesa gourmet',
@@ -16,21 +17,9 @@ const productModel = jest.fn((collection, dbUrl) => ({
   })),
 }));
 
-const product = productModel('lal', 'lalal')
+const product = productModel();
 
 const orderController = modelController(orderModel, product);
-const req = {
-  body: {
-    userId: '5d2b074c8d949249fa60e5fe',
-    client: 'nameclient',
-    products: [{ product: '5d33722684d861448ac52d29', qty: 4 }],
-  },
-};
-// function ReqBody(userId, client, products) {
-//   this.userId = userId;
-//   this.client = client;
-//   this.products = products;
-// }
 const resp = {
   set: jest.fn((link, property) => `{${link}:${property}}`),
   send: jest.fn(json => json),
@@ -61,7 +50,7 @@ describe('ControllerGetOrderById', () => {
         status: 'preparing',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '5d33729184d861448ac52d2f' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerGetOrderById(req, resp, next);
     expect(result.status).toBe('preparing');
@@ -104,7 +93,7 @@ describe('ControllerCreateOrder', () => {
         status: 'preparing',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '123' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerCreateOrder(req, resp, next);
     expect(result.status).toBe('pending');
@@ -119,7 +108,7 @@ describe('ControllerCreateOrder', () => {
         status: 'canceled',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '123' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerPutOrderById(req, resp, next);
     expect(result).toBe(404);
@@ -136,53 +125,52 @@ describe('ControllerUpdateOrder', () => {
         status: 'preparing',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '5d33729184d861448ac52d2f' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerPutOrderById(req, resp, next);
     expect(result.status).toBe('preparing');
     done();
-  });  
+  });
   it('Deberia retornar 400 si no se ingresa nungun dato', async (done) => {
     const req = {
       body: {},
-      params: { orderId: '5d33729184d861448ac52d2f' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerPutOrderById(req, resp, next);
     expect(result).toBe(400);
     done();
   });
-//   it('Deberia retornar 404 si no encuentra la orden para actualizar ', async (done) => {
-//     const req = {
-//       body: {
-//         userId: '5d2b074c8d949249fa60e5fe',
-//         client: 'nameclient',
-//         products: [{ product: '5d33722684d861448ac52d29', qty: 4 }],
-//         status: 'canceled',
-//         dateEntry: '2019-07-20T21:07:37.847Z',
-//       },
-//       params: { orderId: '123' },
-//     };
-//     const result = await orderController.controllerDeleteOrderById(req, resp, next);
-//     expect(result.status).toBe(404);
-//     done();
-//   });
+  it('Deberia retornar 404 si no encuentra la orden para actualizar ', async (done) => {
+    const req = {
+      body: {
+        userId: '5d2b074c8d949249fa60e5fe',
+        client: 'nameclient',
+        products: [{ product: '5d33722684d861448ac52d29', qty: 4 }],
+        status: 'canceled',
+        dateEntry: '2019-07-20T21:07:37.847Z',
+      },
+      params: { orderid: '5d33729184d861448ac52ddsd2f' },
+    };
+    const result = await orderController.controllerDeleteOrderById(req, resp, next);
+    expect(result).toBe(404);
+    done();
+  });
 });
 describe('ControllerDeleteorder', () => {
   it('Deberia eliminar una orden', async (done) => {
     const req = {
-      params: { orderId: '5d33729184d861448ac52d2f' },
+      params: { orderid: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerDeleteOrderById(req, resp, next);
     expect(result.status).toBe('preparing');
     done();
   });
-//   it('Deberia retornar 404 si no encuentra una orden a eliminar ', async (done) => {
-//     const req = {
-//       body: {},
-//       params: { orderId: undefined },
-//     };
-//     const result = await orderController.controllerDeleteOrderById(req, resp, next);
-//     expect(result.status).toBe(404);
-//     done();
-//   });
+  it('Deberia retornar 404 si no encuentra una orden a eliminar ', async (done) => {
+    const req = {
+      params: { orderid: '5d3376c85b52a94827fd1235' },
+    };
+    const result = await orderController.controllerDeleteOrderById(req, resp, next);
+    expect(result).toBe(404);
+    done();
+  });
 });

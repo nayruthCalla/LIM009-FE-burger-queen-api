@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-const userModelGeneral = jest.fn((collection, dbUrl) => ({
+const userModelGeneral = jest.fn(() => ({
   createDocument: jest.fn().mockImplementation(() => Promise.resolve({
     ops: [{
       _id: '12345', email: 'user@gmail.com', password: '$2b$10$nod2eh0Lq0iPdp0BWLjgpeAt0sXV0Up7cfchL0gK2TZo3VJCgmwAa', roles: { admin: false },
@@ -47,7 +46,7 @@ const userModelGeneral = jest.fn((collection, dbUrl) => ({
   countCollections: jest.fn().mockImplementation(() => Promise.resolve(12)),
 }));
 
-const productModelGeneral = jest.fn((collection, dbUrl) => ({
+const productModelGeneral = jest.fn(() => ({
   createDocument: jest.fn().mockImplementation(() => Promise.resolve({
     ops: [{
       _id: '5d328d66976faf100edae191',
@@ -110,7 +109,7 @@ const productModelGeneral = jest.fn((collection, dbUrl) => ({
   ])),
   countCollections: jest.fn().mockImplementation(() => Promise.resolve(8)),
 }));
-const orderModelGeneral = jest.fn((collection, dbUrl) => ({
+const orderModelGeneral = jest.fn(() => ({
   createDocument: jest.fn().mockImplementation(() => Promise.resolve(
     {
       ops: [{
@@ -138,11 +137,8 @@ const orderModelGeneral = jest.fn((collection, dbUrl) => ({
   updateDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
   deleteDocument: jest.fn().mockImplementation(() => Promise.resolve({})),
   searchDataBase: jest.fn().mockImplementation((doc) => {
-    // console.log(doc)
     const idOrder = (doc._id).toString();
-    console.log(idOrder)
-    if (idOrder) {
-      // console.log('hoal')
+    if (idOrder === '5d33729184d861448ac52d2f') {
       return Promise.resolve({
         _id: '5d33829988229e4f28b8ce7e',
         userId: '5d2b074c8d949249fa60e5fe',
