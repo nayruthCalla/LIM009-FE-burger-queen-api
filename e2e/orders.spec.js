@@ -1,3 +1,4 @@
+/* eslint-disable jest/valid-expect */
 const {
   fetch,
   fetchAsTestUser,
@@ -78,7 +79,7 @@ describe('POST /orders', () => {
         expect(resp.status).toBe(200);
         return resp.json();
       })
-      .then((json) => {     
+      .then((json) => {
         expect(typeof json._id).toBe('string');
         expect(typeof json.dateEntry).toBe('string');
         expect(Array.isArray(json.products)).toBe(true);

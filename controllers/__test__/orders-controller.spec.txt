@@ -3,9 +3,10 @@ const modelController = require('../order-controller');
 jest.mock('../../models/general-model');
 const { orderModelGeneral } = require('../../models/general-model');
 
+
 const orderModel = orderModelGeneral('users', 'dbUrl default');
 // const bdProduc = () =>
-const productModel = jest.fn((collection, dbUrl) => ({
+const productModel = jest.fn(() => ({
   searchDataBase: jest.fn().mockImplementation(() => Promise.resolve({
     _id: '5d328d66976faf100edae191',
     name: 'hamburguesa gourmet',
@@ -16,7 +17,7 @@ const productModel = jest.fn((collection, dbUrl) => ({
   })),
 }));
 
-const product = productModel('lal', 'lalal')
+const product = productModel('lal', 'lalal');
 
 const orderController = modelController(orderModel, product);
 const req = {
