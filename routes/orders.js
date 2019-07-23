@@ -4,7 +4,8 @@ const modelDataBase = require('../models/general-model');
 const orderModel = modelDataBase('orders', dbUrl);
 const modelController = require('../controllers/order-controller');
 
-const orderController = modelController(orderModel);
+const productModel = modelDataBase('products', dbUrl);
+const orderController = modelController(orderModel, productModel);
 const {
   requireAuth,
 } = require('../middleware/auth');
