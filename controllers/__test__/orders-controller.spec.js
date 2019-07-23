@@ -61,7 +61,7 @@ describe('ControllerGetOrderById', () => {
         status: 'preparing',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '123' },
+      params: { productId: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerGetOrderById(req, resp, next);
     expect(result.status).toBe('preparing');
@@ -136,7 +136,7 @@ describe('ControllerUpdateOrder', () => {
         status: 'preparing',
         dateEntry: '2019-07-20T21:07:37.847Z',
       },
-      params: { productId: '123' },
+      params: { productId: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerPutOrderById(req, resp, next);
     expect(result.status).toBe('preparing');
@@ -145,7 +145,7 @@ describe('ControllerUpdateOrder', () => {
   it('Deberia retornar 400 si no se ingresa nungun dato', async (done) => {
     const req = {
       body: {},
-      params: { orderId: '123' },
+      params: { orderId: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerPutOrderById(req, resp, next);
     expect(result).toBe(400);
@@ -170,7 +170,7 @@ describe('ControllerUpdateOrder', () => {
 describe('ControllerDeleteorder', () => {
   it('Deberia eliminar una orden', async (done) => {
     const req = {
-      params: { orderId: '123' },
+      params: { orderId: '5d33729184d861448ac52d2f' },
     };
     const result = await orderController.controllerDeleteOrderById(req, resp, next);
     expect(result.status).toBe('preparing');

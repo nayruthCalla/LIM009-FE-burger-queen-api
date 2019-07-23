@@ -140,7 +140,7 @@ const orderModelGeneral = jest.fn((collection, dbUrl) => ({
   searchDataBase: jest.fn().mockImplementation((doc) => {
     // console.log(doc)
     const idOrder = (doc._id).toString();
-    // console.log(idOrder)
+    console.log(idOrder)
     if (idOrder) {
       // console.log('hoal')
       return Promise.resolve({
