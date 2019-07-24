@@ -55,7 +55,7 @@ module.exports = productModel => ({
     try {
       productIdDb = { _id: new ObjectId(productId) };
     } catch (error) {
-      // return next(404);
+      return next(404);
     }
     if ((!name && !price && !image && !type) || (price && typeof price !== 'number')) {
       return next(400);
