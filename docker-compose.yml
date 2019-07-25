@@ -1,16 +1,10 @@
 version: "3"
 services:
   db:
-    image: mongo:latest
-    restart: always
-    #volumes:
-     # - db-data:/data/db
-    #command: --dbpath /db-data
-    # aqui configura tu imagen de base de datos, te recomendamos una de las sgtes:
-    # https://hub.docker.com/_/mysql
-    # https://hub.docker.com/_/mongo
-    ports:
-      - "27017:27017"
+    image: mongo:4
+    restart: always    
+    expose:
+      - "27017"
     networks:
       - private
   node:
@@ -20,7 +14,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
-      - DB_URL='mongodb://localhost:27017/burger-queen'
+      - DB_URL=mongodb://db:27017/burger-queen
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:
@@ -28,13 +22,13 @@ services:
     expose:
       - "8080" # nuestra app corre en el puerto 8080
     ports:
-      - "80:8080" # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
+      - "8000:8080" # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
     command: "npm start"
     depends_on:
-      - db
+      - db      
     networks:
       - public
-      - private
+      - private    
 networks:
   public:
     internal: false

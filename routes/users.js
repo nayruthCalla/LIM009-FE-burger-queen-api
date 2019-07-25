@@ -16,20 +16,23 @@ const {
 const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
-    return next();
+    next();
   }
-
   const adminUser = {
     email: adminEmail,
-    password: bcrypt.hashSync(adminPassword, 10),
+    password: '123',
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
+  const userAdmin = await userModel.searchDataBase({ email: adminUser.email });
+  // console.log(userAdmin,'hola')
   if (!userAdmin) {
-    await ((await db(dbUrl)).collection('users').insertOne(adminUser));
+    await userModel.createDocument(adminUser);
+    // console.log(a,'recien por crear')
+    return next();
   }
   return next();
+  // console.log('bbbbbbbbbbbbbbbbbbbb')
 };
 
 
@@ -97,7 +100,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es ni admin
    */
-  app.get('/users', requireAdmin, userController.controllerGetAllUsers);
+  // app.get('/users', requireAdmin, userController.controllerGetAllUsers);
 
   /**
    * @name GET /users/:uid
@@ -115,7 +118,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, userController.controllerGetUserById);
+  // app.get('/users/:uid', requireAuth, userController.controllerGetUserById);
 
   /**
    * @name POST /users
