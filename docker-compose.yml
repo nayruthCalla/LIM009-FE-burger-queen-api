@@ -8,7 +8,7 @@ services:
     networks:
       - private
   node:
-    image: "node:10-alpine" # https://hub.docker.com/_/node/
+    image: "node:10" # https://hub.docker.com/_/node/
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -25,10 +25,10 @@ services:
       - "8000:8080" # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
     command: "npm start"
     depends_on:
-      - db      
+      - db
     networks:
       - public
-      - private    
+      - private
 networks:
   public:
     internal: false
