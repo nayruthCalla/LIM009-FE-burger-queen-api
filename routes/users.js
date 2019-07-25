@@ -18,18 +18,21 @@ const initAdminUser = async (app, next) => {
   if (!adminEmail || !adminPassword) {
     return next();
   }
-
   const adminUser = {
     email: adminEmail,
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  const userAdmin = await ((await db(dbUrl)).collection('users').findOne({ email: adminUser.email }));
+  const userAdmin = await userModel.searchDataBase({ email: adminUser.email });
+  // console.log(userAdmin,'hola')
   if (!userAdmin) {
-    await ((await db(dbUrl)).collection('users').insertOne(adminUser));
+    await userModel.createDocument(adminUser);
+    // console.log(a,'recien por crear')
+    return next();
   }
   return next();
+  // console.log('bbbbbbbbbbbbbbbbbbbb')
 };
 
 
@@ -178,5 +181,6 @@ module.exports = (app, next) => {
    * @code {404} si la usuaria solicitada no existe
    */
   app.delete('/users/:uid', requireAuth, userController.controllerDeleteUserById);
+
   initAdminUser(app, next);
 };
