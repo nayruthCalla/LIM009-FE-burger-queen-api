@@ -1,17 +1,21 @@
 const { MongoClient } = require('mongodb');
 
+let db = null;
+
 module.exports = async (dbUrl) => {
-  const client = new MongoClient(dbUrl, { useNewUrlParser: true });
-  try {
-    await client.connect();
-    const db = client.db();
-    console.info('base de datos conectada');
-    return db;
-  } catch (err) {
-    console.info(err.stack);
+  if (!db) {
+    const client = new MongoClient(dbUrl, { useNewUrlParser: true });
+    try {
+      await client.connect();
+      const db = await client.db();
+      console.info('base de datos conectada');
+      return db;
+    } catch (err) {
+      console.info(err.stack);
+    }
   }
-  client.close();
-  console.info('connection close');
+  console.log(db)
+  return db;
 };
 
 /*
