@@ -7,14 +7,13 @@ module.exports = async (dbUrl) => {
     const client = new MongoClient(dbUrl, { useNewUrlParser: true });
     try {
       await client.connect();
-      const db = await client.db();
+      db = await client.db();
       console.info('base de datos conectada');
       return db;
     } catch (err) {
       console.info(err.stack);
     }
   }
-  console.log(db)
   return db;
 };
 
