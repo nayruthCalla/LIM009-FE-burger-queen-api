@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-let db = null;
+const db = null;
 
 module.exports = async (dbUrl) => {
   if (!db) {
@@ -14,7 +14,7 @@ module.exports = async (dbUrl) => {
       console.info(err.stack);
     }
   }
-  console.log(db)
+  // console.log(db)
   return db;
 };
 

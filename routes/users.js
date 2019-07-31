@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const db = require('../services/connection');
 const { dbUrl } = require('../config');
 const modelDataBase = require('../models/general-model');
 
@@ -24,9 +23,9 @@ const initAdminUser = async (app, next) => {
     roles: { admin: true },
   };
   // TODO: crear usuarix admin
-  const userAdmin = await userModel.searchDataBase({ email: adminUser.email }); 
+  const userAdmin = await userModel.searchDataBase({ email: adminUser.email });
   if (!userAdmin) {
-    await userModel.createDocument(adminUser);   
+    await userModel.createDocument(adminUser);
     return next();
   }
   return next();
