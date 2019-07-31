@@ -16,7 +16,7 @@ module.exports = (orderModel, productModel) => ({
         return { qty: element.qty, product: { productId: ObjProduct._id, name: ObjProduct.name, price: ObjProduct.price } };
       });
     } catch (err) {
-      return resp.send(404);
+      return next(404);
     }
     const newOrder = await orderModel.createDocument({
       userId, client, products: await Promise.all(arrayProducts), status: 'pending', dateEntry: new Date(),
