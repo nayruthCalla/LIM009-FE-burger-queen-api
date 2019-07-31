@@ -12,7 +12,7 @@ module.exports = (orderModel, productModel) => ({
       const productId = element.product;
       const ObjProduct = await productModel.searchDataBase({ _id: new ObjectId(productId) });
       if (!ObjProduct) {
-        return next(404);
+        return resp.status(404);
       }
       return { qty: element.qty, product: { productId: ObjProduct._id, name: ObjProduct.name, price: ObjProduct.price } };
     });
