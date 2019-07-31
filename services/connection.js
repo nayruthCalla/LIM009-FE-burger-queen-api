@@ -16,20 +16,3 @@ module.exports = async (dbUrl) => {
   }
   return db;
 };
-
-/*
-const { MongoClient } = require('mongodb');
-
-let db;
-
-module.exports = (dbUrl) => {
-  if (!db) {
-    const MonClient = MongoClient(dbUrl, { useNewUrlParser: true });
-    return MonClient.connect().then((client) => {
-      db = client.db();
-      console.info('Connect to DataBase');
-      return db;
-    });
-  }
-  return Promise.resolve(db);
-}; */
