@@ -15,7 +15,6 @@ const register = (app, routes, cb) => {
   if (!routes.length) {
     return cb();
   }
-
   routes[0](app, (err) => {
     if (err) {
       return cb(err);

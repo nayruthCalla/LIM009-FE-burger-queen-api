@@ -1,5 +1,5 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
+const dbf = require('../connection');
 
 describe('insert', () => {
   let connection;
@@ -9,8 +9,8 @@ describe('insert', () => {
   beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
     const dbUrl = await mongoServer.getConnectionString();
-    connection = await MongoClient.connect(dbUrl, { useNewUrlParser: true });
-    db = await connection.db();
+    connection = await dbf(dbUrl);
+    db = await connection;
   });
 
   afterAll(async () => {
