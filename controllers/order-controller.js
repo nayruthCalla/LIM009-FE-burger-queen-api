@@ -11,10 +11,7 @@ module.exports = (orderModel, productModel) => ({
     const arrayProducts = products.map(async (element) => {
       const productId = element.product;
       const ObjProduct = await productModel.searchDataBase({ _id: new ObjectId(productId) });
-      if (ObjProduct != null) {
-        return { qty: element.qty, product: { productId: ObjProduct._id, name: ObjProduct.name, price: ObjProduct.price } };        
-      }
-      return next(404);
+      return { qty: element.qty, product: { productId: ObjProduct._id, name: ObjProduct.name, price: ObjProduct.price } };
     });
     const newOrder = await orderModel.createDocument({
       userId, client, products: await Promise.all(arrayProducts), status: 'pending', dateEntry: new Date(),
