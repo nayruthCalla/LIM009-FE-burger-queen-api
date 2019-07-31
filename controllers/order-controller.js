@@ -70,9 +70,14 @@ module.exports = (orderModel, productModel) => ({
     if ((!userId && !client && !products && !status) || (status !== 'preparing' && status !== 'pending' && status !== 'canceled' && status !== 'delivering' && status !== 'delivered')) {
       return next(400);
     }
-    await orderModel.updateDocument(order._id, {
+    // eslint-disable-next-line no-empty
+    const updateOrders = {
       userId, client, products, status,
-    });
+    };
+    if (status === 'delivered') {
+      updateOrders.dateProcessed = new Date();
+    }
+    await orderModel.updateDocument(order._id, updateOrders);
     const updateOrder = await orderModel.searchDataBase(ordersIdDb);
     return resp.send(updateOrder);
   },
