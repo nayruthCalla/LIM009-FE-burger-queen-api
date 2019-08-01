@@ -411,7 +411,7 @@ Date.prototype.isValid = function () {
       .then(json => expect(json.status).toBe('delivering'))
   ));
 
-  it('should update order (set status to delivered)', () => (
+  it('should update order and add the property of dateProcessed (set status to delivered),', () => (
     Promise.all([
       fetchAsAdmin('/products', {
         method: 'POST',
@@ -443,7 +443,7 @@ Date.prototype.isValid = function () {
         expect(resp.status).toBe(200);
         return resp.json();
       })
-      .then(json => expect(json.status).toBe('delivered'))
+      .then(json => expect(Object.prototype.hasOwnProperty.call(json, 'dateProcessed')).toBe(true))
   ));
   it('should be a valid date (set the status as delivered)', () => (
     Promise.all([
@@ -478,7 +478,6 @@ Date.prototype.isValid = function () {
         return resp.json();
       })
       .then((json) => {
-        // console.log(typeof json.dateProcessed)
         const fecha = new Date(json.dateProcessed);
         expect(fecha.isValid()).toBe(true);
       })

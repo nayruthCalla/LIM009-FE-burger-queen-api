@@ -28,7 +28,6 @@
     "eslint-plugin-jest": "^22.7.2",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
-    "mockdate": "^2.0.4",
     "mongodb": "^3.2.7"
   },
   "devDependencies": {
