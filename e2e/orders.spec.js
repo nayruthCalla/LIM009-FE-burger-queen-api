@@ -1,9 +1,11 @@
+/* eslint-disable jest/no-identical-title */
 /* eslint-disable jest/valid-expect */
 const {
   fetch,
   fetchAsTestUser,
   fetchAsAdmin,
 } = process;
+var MockDate = require('mockdate');
 
 
 describe('POST /orders', () => {
@@ -441,6 +443,40 @@ describe('PUT /orders/:orderid', () => {
         return resp.json();
       })
       .then(json => expect(json.status).toBe('delivered'))
+  ));
+  it('should update order (set status to delivered)', () => (
+    Promise.all([
+      fetchAsAdmin('/products', {
+        method: 'POST',
+        body: { name: 'Test', price: 66 },
+      }),
+      fetchAsTestUser('/users/test@test.test'),
+    ])
+      .then((responses) => {
+        expect(responses[0].status).toBe(200);
+        expect(responses[1].status).toBe(200);
+        return Promise.all([responses[0].json(), responses[1].json()]);
+      })
+      .then(([product, user]) => fetchAsTestUser('/orders', {
+        method: 'POST',
+        body: { products: [{ product: product._id, qty: 5 }], userId: user._id },
+      }))
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then((json) => {
+        expect(json.status).toBe('pending');
+        return fetchAsAdmin(`/orders/${json._id}`, {
+          method: 'PUT',
+          body: { status: 'delivered' },
+        });
+      })
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then(json => expect(json.dateProcessed).toBe('delivered'))'dfjdkjfkd'
   ));
 });
 

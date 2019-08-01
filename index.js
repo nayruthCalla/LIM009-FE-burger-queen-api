@@ -19,13 +19,12 @@ db(dbUrl)
     // parse application/x-www-form-urlencoded
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
-    app.use(authMiddleware(secret));
     app.use((_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
     });
-
+    app.use(authMiddleware(secret));
     // Registrar rutas
     routes(app, (err) => {
       if (err) {
