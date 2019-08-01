@@ -1,9 +1,19 @@
+/* eslint-disable jest/no-identical-title */
 /* eslint-disable jest/valid-expect */
 const {
   fetch,
   fetchAsTestUser,
   fetchAsAdmin,
 } = process;
+
+const getCurrentDate = () => new Date();
+test('It should create new date', () => {
+  jest
+    .spyOn(global, 'Date')
+    .mockImplementationOnce(() => new Date('2019-05-14T11:01:58.135Z'));
+
+  expect(getCurrentDate()).toEqual(new Date('2019-05-14T11:01:58.135Z'));
+});
 
 
 describe('POST /orders', () => {
@@ -408,6 +418,40 @@ describe('PUT /orders/:orderid', () => {
       .then(json => expect(json.status).toBe('delivering'))
   ));
 
+  it('should update order and add the property of dateProcessed (set status to delivered),', () => (
+    Promise.all([
+      fetchAsAdmin('/products', {
+        method: 'POST',
+        body: { name: 'Test', price: 66 },
+      }),
+      fetchAsTestUser('/users/test@test.test'),
+    ])
+      .then((responses) => {
+        expect(responses[0].status).toBe(200);
+        expect(responses[1].status).toBe(200);
+        return Promise.all([responses[0].json(), responses[1].json()]);
+      })
+      .then(([product, user]) => fetchAsTestUser('/orders', {
+        method: 'POST',
+        body: { products: [{ product: product._id, qty: 5 }], userId: user._id },
+      }))
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then((json) => {
+        expect(json.status).toBe('pending');
+        return fetchAsAdmin(`/orders/${json._id}`, {
+          method: 'PUT',
+          body: { status: 'delivered' },
+        });
+      })
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then(json => expect(Object.prototype.hasOwnProperty.call(json, 'dateProcessed')).toBe(true))
+  ));
   it('should update order (set status to delivered)', () => (
     Promise.all([
       fetchAsAdmin('/products', {
@@ -440,8 +484,8 @@ describe('PUT /orders/:orderid', () => {
         expect(resp.status).toBe(200);
         return resp.json();
       })
-    // .then(json => expect(json.status).toBe('delivered'))
-      .then(json => expect(json.dateProcessed).toBe('hjgjf'))
+      // .then(json => expect(json.dateProcessed).toBe('delivered'))
+      .then(json => expect(json.status).toBe('delivered'))
   ));
 });
 
