@@ -5,9 +5,6 @@ const {
   fetchAsTestUser,
   fetchAsAdmin,
 } = process;
-var MockDate = require('mockdate');
-
-
 describe('POST /orders', () => {
   it('should fail with 401 when no auth', () => (
     fetch('/orders', { method: 'POST' })
@@ -273,6 +270,10 @@ describe('GET /orders/:orderid', () => {
 
 
 describe('PUT /orders/:orderid', () => {
+
+Date.prototype.isValid = function () {
+    return isFinite(this);
+};
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'PUT' })
       .then(resp => expect(resp.status).toBe(401))
@@ -444,7 +445,7 @@ describe('PUT /orders/:orderid', () => {
       })
       .then(json => expect(json.status).toBe('delivered'))
   ));
-  it('should update order (set status to delivered)', () => (
+  it('should be a valid date (set the status as delivered)', () => (
     Promise.all([
       fetchAsAdmin('/products', {
         method: 'POST',
@@ -476,7 +477,11 @@ describe('PUT /orders/:orderid', () => {
         expect(resp.status).toBe(200);
         return resp.json();
       })
-      .then(json => expect(json.dateProcessed).toBe('delivered'))'dfjdkjfkd'
+      .then((json) => {
+        // console.log(typeof json.dateProcessed)
+        const fecha = new Date(json.dateProcessed);
+        expect(fecha.isValid()).toBe(true);
+      })
   ));
 });
 
