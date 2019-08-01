@@ -478,7 +478,6 @@ Date.prototype.isValid = function () {
         return resp.json();
       })
       .then((json) => {
-        // console.log(typeof json.dateProcessed)
         const fecha = new Date(json.dateProcessed);
         expect(fecha.isValid()).toBe(true);
       })
