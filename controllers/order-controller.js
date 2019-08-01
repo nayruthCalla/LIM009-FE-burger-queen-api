@@ -74,7 +74,7 @@ module.exports = (orderModel, productModel) => ({
     const updateOrders = {
       userId, client, products, status,
     };
-    if (!order.dateProcessed && order.status === 'delivered') {
+    if (!order.dateProcessed && status === 'delivered') {
       updateOrders.dateProcessed = new Date();
     }
     await orderModel.updateDocument(order._id, updateOrders);
