@@ -5,17 +5,6 @@ const {
   fetchAsTestUser,
   fetchAsAdmin,
 } = process;
-
-const getCurrentDate = () => new Date();
-test('It should create new date', () => {
-  jest
-    .spyOn(global, 'Date')
-    .mockImplementationOnce(() => new Date('2019-05-14T11:01:58.135Z'));
-
-  expect(getCurrentDate()).toEqual(new Date('2019-05-14T11:01:58.135Z'));
-});
-
-
 describe('POST /orders', () => {
   it('should fail with 401 when no auth', () => (
     fetch('/orders', { method: 'POST' })
@@ -281,6 +270,10 @@ describe('GET /orders/:orderid', () => {
 
 
 describe('PUT /orders/:orderid', () => {
+
+Date.prototype.isValid = function () {
+    return isFinite(this);
+};
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'PUT' })
       .then(resp => expect(resp.status).toBe(401))
@@ -452,7 +445,7 @@ describe('PUT /orders/:orderid', () => {
       })
       .then(json => expect(Object.prototype.hasOwnProperty.call(json, 'dateProcessed')).toBe(true))
   ));
-  it('should update order (set status to delivered)', () => (
+  it('should be a valid date (set the status as delivered)', () => (
     Promise.all([
       fetchAsAdmin('/products', {
         method: 'POST',
@@ -484,8 +477,11 @@ describe('PUT /orders/:orderid', () => {
         expect(resp.status).toBe(200);
         return resp.json();
       })
-      // .then(json => expect(json.dateProcessed).toBe('delivered'))
-      .then(json => expect(json.status).toBe('delivered'))
+      .then((json) => {
+        // console.log(typeof json.dateProcessed)
+        const fecha = new Date(json.dateProcessed);
+        expect(fecha.isValid()).toBe(true);
+      })
   ));
 });
 
