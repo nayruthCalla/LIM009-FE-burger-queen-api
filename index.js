@@ -19,9 +19,9 @@ db(dbUrl)
     app.set('pkg', pkg);
 
     // parse application/x-www-form-urlencoded
+    app.use(cors());
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
-    app.use(cors());
     app.use(authMiddleware(secret));
     // Registrar rutas
     routes(app, (err) => {
