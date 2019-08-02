@@ -9,7 +9,7 @@ const db = require('./services/connection');
 
 const { dbUrl, port, secret } = config;
 const app = express();
-app.use(cors());
+// app.use(cors());
 // TODO: Conección a la BD en mogodb
 
 db(dbUrl)
