@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 module.exports = (orderModel, productModel) => ({
   controllerCreateOrder: async (req, resp, next) => {
     const { userId, client, products } = req.body;
-    if (!userId || !products) {
+    if (!userId || !products || products.length === 0) {
       return next(400);
     }
     const arrayProducts = products.map(async (element) => {
