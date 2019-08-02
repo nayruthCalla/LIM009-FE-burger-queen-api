@@ -9,17 +9,16 @@ const db = require('./services/connection');
 
 const { dbUrl, port, secret } = config;
 const app = express();
-// app.use(cors());
 // TODO: Conección a la BD en mogodb
 
 db(dbUrl)
   .then(() => {
     app.set('config', config);
     app.set('pkg', pkg);
-
+    app.use(cors());
     // parse application/x-www-form-urlencoded
     app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());    
+    app.use(express.json());
     app.use(authMiddleware(secret));
     // Registrar rutas
     routes(app, (err) => {
