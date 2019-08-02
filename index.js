@@ -17,6 +17,7 @@ db(dbUrl)
     app.set('pkg', pkg);
     app.use(cors());
     // parse application/x-www-form-urlencoded
+    app.use(cors());
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(authMiddleware(secret));

@@ -2,7 +2,7 @@ version: "3"
 services:
   db:
     image: mongo:4
-    restart: always    
+    restart: always 
     expose:
       - "27017"
     networks:
