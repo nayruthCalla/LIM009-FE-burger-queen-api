@@ -15,9 +15,9 @@ type User {
     qty: Float!
   }
   type Query { 
-    GetUsers:[getUser]!    
+    GetUsers(page: Int):[getUser]!    
     Getproducts(page: Int):[Product]!
-    GetOrders: [Order]!
+    GetOrders(page: Int): [Order]!
     GetUserById(uid: ID!): getUser!
     GetproductsById(productId: ID!): Product!
     GetOrdersById(orderid: ID!): Order!
@@ -35,6 +35,7 @@ type User {
     DeleteProduct(productId: ID!): Product!
     CreateOrder(userId: ID!, client: String!, input: [productsOrders]!): Order!
     PutOrderById(orderid: ID!, userId: ID!, client: String!, input: [productsOrders]!, status: String!): Order!
+    DeleteOrderById(orderid: ID!): Order!
   }  
   type getUser {
     """

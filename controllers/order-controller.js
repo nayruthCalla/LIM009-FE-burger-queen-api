@@ -72,7 +72,10 @@ module.exports = (orderModel, productModel) => ({
     }
     // eslint-disable-next-line no-empty
     const updateOrders = {
-      userId, client, products, status,
+      userId: userId || order.userId,
+      client: client || order.client,
+      products: products || order.products,
+      status: status || order.status,
     };
     if (!order.dateProcessed && status === 'delivered') {
       updateOrders.dateProcessed = new Date(Date.now());
