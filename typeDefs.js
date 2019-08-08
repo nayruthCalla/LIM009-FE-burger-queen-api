@@ -2,27 +2,50 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
 type User {
+  """
+  Description for field
+  Supports **multi-line** description for your [API](http://example.com)!
+  """
     message: String!
     token: String!
     
   }  
-  type Query {
-    currentUser:[getUser]!
-    products:[Product]!
-    getOrders: [Order]!
-  }  
-  type Mutation {
-    authentication(email: String!, password: String!): User!
+  input productsOrders{
+    product: ID!
+    qty: Float!
   }
+  type Query { 
+    GetUsers:[getUser]!    
+    Getproducts(page: Int):[Product]!
+    GetOrders: [Order]!
+    GetUserById(uid: ID!): getUser!
+    GetproductsById(productId: ID!): Product!
+    GetOrdersById(orderid: ID!): Order!
+  } 
   type rol {
       admin: Boolean
   }
+  type Mutation {
+    authentication(email: String!, password: String!): User!
+    CreateUser(email: String!, password: String!, rol: Boolean): getUser!
+    PutUserById(uid: ID!,email: String!, password: String!, rol: Boolean): getUser!
+    DeleteUserById(uid: ID!): getUser!
+    CreateProduct(name: String!, price: Float, image: String!, type: String!): Product!
+    PutProduct(productId: ID!, name: String!, price: Float, image: String!, type: String!): Product!
+    DeleteProduct(productId: ID!): Product!
+    CreateOrder(userId: ID!, client: String!, input: [productsOrders]!): Order!
+    PutOrderById(orderid: ID!, userId: ID!, client: String!, input: [productsOrders]!, status: String!): Order!
+  }  
   type getUser {
+    """
+    Description for field
+    Supports **multi-line** description for your [API](http://example.com)!
+    """
       _id: ID!
       email: String!
       password: String!
       roles :  rol!
-  }
+  }  
   type Product {
     _id: ID!
     name: String!
@@ -37,8 +60,8 @@ type User {
     price: Int!
   }
   type products {
-    qty: Int!
-    product: productsobj
+    qty: Float!
+    product: productsobj!
   }
   type Order {
       _id: ID!
