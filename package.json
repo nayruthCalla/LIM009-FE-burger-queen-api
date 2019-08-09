@@ -35,7 +35,8 @@
     "graphql-tools": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas": "^1.7.0",
-    "mongodb": "^3.2.7"
+    "mongodb": "^3.2.7",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -51,7 +52,6 @@
     "jsdoc": "^3.6.2",
     "jsdoc-http-plugin": "^0.3.0",
     "mongodb-memory-server": "^5.1.5",
-    "node-fetch": "^2.6.0",
     "nodemon": "^1.19.1",
     "tree-kill": "^1.2.1"
   }

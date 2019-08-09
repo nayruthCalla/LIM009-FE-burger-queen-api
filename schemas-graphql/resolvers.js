@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { UserInputError, ApolloError } = require('apollo-server');
+const { ApolloError } = require('apollo-server');
 
 const baseURL = 'http://165.22.166.131:8080/';
 const resolvers = {
@@ -10,13 +10,11 @@ const resolvers = {
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },
       });
-      const data = await response.json();      
-      if (data.statusCode !== '200' && data.statusCode !== undefined ) { 
+      const data = await response.json();
+      if (data.statusCode !== '200' && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
-      
-      
     },
     CreateUser: async (parent, { email, password, rol }, token) => {
       const response = await fetch(`${baseURL}users/`, {
@@ -29,12 +27,14 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200) { 
+      if (data.statusCode !== 200) {
         throw new ApolloError(data.message);
       }
       return data;
     },
-    PutUserById: async (parent, { uid, email, password, rol }, token) => {
+    PutUserById: async (parent, {
+      uid, email, password, rol,
+    }, token) => {
       const response = await fetch(`${baseURL}users/${uid}`, {
         method: 'PUT',
         body: JSON.stringify({ email, password, roles: { admin: rol } }),
@@ -45,7 +45,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -60,15 +60,19 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
     },
-    CreateProduct: async (parent, { name, price, image, type }, token) => {
+    CreateProduct: async (parent, {
+      name, price, image, type,
+    }, token) => {
       const response = await fetch(`${baseURL}products/`, {
         method: 'POST',
-        body: JSON.stringify({ name, price, image, type }),
+        body: JSON.stringify({
+          name, price, image, type,
+        }),
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line quote-props
@@ -76,15 +80,19 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
     },
-    PutProduct: async (parent, { productId, name, price, image, type }, token) => {
+    PutProduct: async (parent, {
+      productId, name, price, image, type,
+    }, token) => {
       const response = await fetch(`${baseURL}products/${productId}`, {
         method: 'PUT',
-        body: JSON.stringify({ name, price, image, type }),
+        body: JSON.stringify({
+          name, price, image, type,
+        }),
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line quote-props
@@ -92,7 +100,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -107,7 +115,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -123,15 +131,19 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
     },
-    PutOrderById: async (parent, { orderid, userId, client, input, status }, token) => {
+    PutOrderById: async (parent, {
+      orderid, userId, client, input, status,
+    }, token) => {
       const response = await fetch(`${baseURL}orders/${orderid}`, {
         method: 'PUT',
-        body: JSON.stringify({ userId, client, products: input, status }),
+        body: JSON.stringify({
+          userId, client, products: input, status,
+        }),
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line quote-props
@@ -139,14 +151,14 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
     },
     DeleteOrderById: async (parent, { orderid }, token) => {
       const response = await fetch(`${baseURL}orders/${orderid}`, {
-        method: 'DELETE',        
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line quote-props
@@ -154,7 +166,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -173,7 +185,7 @@ const resolvers = {
       });
       // console.info('hola')
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -189,7 +201,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -206,7 +218,7 @@ const resolvers = {
       });
       // console.info('hola')
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -222,7 +234,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -239,7 +251,7 @@ const resolvers = {
       });
       // console.info('hola')
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
@@ -255,7 +267,7 @@ const resolvers = {
         },
       });
       const data = await response.json();
-      if (data.statusCode !== 200 && data.statusCode !== undefined) { 
+      if (data.statusCode !== 200 && data.statusCode !== undefined) {
         throw new ApolloError(data.message);
       }
       return data;
