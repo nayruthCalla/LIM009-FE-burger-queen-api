@@ -34,7 +34,7 @@ type User {
     PutProduct(productId: ID!, name: String!, price: Float, image: String!, type: String!): Product!
     DeleteProduct(productId: ID!): Product!
     CreateOrder(userId: ID!, client: String!, input: [productsOrders]!): Order!
-    PutOrderById(orderid: ID!, userId: ID!, client: String!, input: [productsOrders]!, status: String!): Order!
+    PutOrderById(orderid: ID!, userId: ID, client: String, input: [productsOrders], status: String!): Order!
     DeleteOrderById(orderid: ID!): Order!
   }  
   type getUser {
@@ -58,7 +58,7 @@ type User {
   type productsobj {
     productId: ID!
     name: String!
-    price: Int!
+    price: Float!
   }
   type products {
     qty: Float!
