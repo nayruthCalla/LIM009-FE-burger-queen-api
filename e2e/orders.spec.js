@@ -271,9 +271,10 @@ describe('GET /orders/:orderid', () => {
 
 describe('PUT /orders/:orderid', () => {
   // eslint-disable-next-line no-extend-native
-  // Date.prototype.isValid = function () {
-  //   return isFinite(this);
-  // };
+  Date.prototype.isValid = function () {
+    return isFinite(this);
+  };
+  // agregar "no-restricted-globals": ["error", "event"]
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'PUT' })
       .then(resp => expect(resp.status).toBe(401))
@@ -445,43 +446,43 @@ describe('PUT /orders/:orderid', () => {
       })
       .then(json => expect(Object.prototype.hasOwnProperty.call(json, 'dateProcessed')).toBe(true))
   ));
-  // it('should be a valid date (set the status as delivered)', () => (
-  //   Promise.all([
-  //     fetchAsAdmin('/products', {
-  //       method: 'POST',
-  //       body: { name: 'Test', price: 66 },
-  //     }),
-  //     fetchAsTestUser('/users/test@test.test'),
-  //   ])
-  //     .then((responses) => {
-  //       expect(responses[0].status).toBe(200);
-  //       expect(responses[1].status).toBe(200);
-  //       return Promise.all([responses[0].json(), responses[1].json()]);
-  //     })
-  //     .then(([product, user]) => fetchAsTestUser('/orders', {
-  //       method: 'POST',
-  //       body: { products: [{ product: product._id, qty: 5 }], userId: user._id },
-  //     }))
-  //     .then((resp) => {
-  //       expect(resp.status).toBe(200);
-  //       return resp.json();
-  //     })
-  //     .then((json) => {
-  //       expect(json.status).toBe('pending');
-  //       return fetchAsAdmin(`/orders/${json._id}`, {
-  //         method: 'PUT',
-  //         body: { status: 'delivered' },
-  //       });
-  //     })
-  //     .then((resp) => {
-  //       expect(resp.status).toBe(200);
-  //       return resp.json();
-  //     })
-  //     .then((json) => {
-  //       const fecha = new Date(json.dateProcessed);
-  //       expect(fecha.isValid()).toBe(true);
-  //     })
-  // ));
+  it('Should must be a valid date (once the status has been established as delivered)', () => (
+    Promise.all([
+      fetchAsAdmin('/products', {
+        method: 'POST',
+        body: { name: 'Test', price: 66 },
+      }),
+      fetchAsTestUser('/users/test@test.test'),
+    ])
+      .then((responses) => {
+        expect(responses[0].status).toBe(200);
+        expect(responses[1].status).toBe(200);
+        return Promise.all([responses[0].json(), responses[1].json()]);
+      })
+      .then(([product, user]) => fetchAsTestUser('/orders', {
+        method: 'POST',
+        body: { products: [{ product: product._id, qty: 5 }], userId: user._id },
+      }))
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then((json) => {
+        expect(json.status).toBe('pending');
+        return fetchAsAdmin(`/orders/${json._id}`, {
+          method: 'PUT',
+          body: { status: 'delivered' },
+        });
+      })
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        return resp.json();
+      })
+      .then((json) => {
+        const fecha = new Date(json.dateProcessed);
+        expect(fecha.isValid()).toBe(true);
+      })
+  ));
 });
 
 
