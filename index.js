@@ -18,10 +18,14 @@ const server = new ApolloServer({
   // These will be defined for both new or existing servers
   typeDefs,
   resolvers,
+  playground: {
+    settings: {
+      'editor.theme': 'light',
+    },
+  },
   context: ({ req }) => req.headers,
 });
 server.applyMiddleware({ app });
-// app.listen({ port: 4000 }, () => console.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
 db(dbUrl)
   .then(() => {
     app.set('config', config);
