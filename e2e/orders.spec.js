@@ -446,7 +446,7 @@ describe('PUT /orders/:orderid', () => {
       })
       .then(json => expect(Object.prototype.hasOwnProperty.call(json, 'dateProcessed')).toBe(true))
   ));
-  it('Should must be a valid date (once the status has been established as delivered)', () => (
+  it('Should must be a valid date ( status has been established as delivered)', () => (
     Promise.all([
       fetchAsAdmin('/products', {
         method: 'POST',
