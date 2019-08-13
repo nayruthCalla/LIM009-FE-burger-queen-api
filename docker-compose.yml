@@ -28,7 +28,7 @@ services:
       - db
     networks:
       - public
-      - private
+      - private 
 networks:
   public:
     internal: false

@@ -1,6 +1,6 @@
 {
   "extends": ["airbnb-base","plugin:jest/recommended"],
-  "plugins": ["jest"],
+  "plugins": ["jest"],    
   "env": {
     "node": true,
     "jest/globals": true
@@ -9,6 +9,7 @@
     "ecmaVersion": 2018
   },
   "rules": {
+    "no-restricted-globals": ["error", "event"],
     "no-underscore-dangle": "off",
     "consistent-return": "off",
     "no-shadow": "off",

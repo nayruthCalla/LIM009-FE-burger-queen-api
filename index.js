@@ -1,6 +1,5 @@
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
+const helmet = require('helmet');
 const { ApolloServer } = require('apollo-server-express');
 
 const cors = require('cors');
@@ -30,14 +29,13 @@ const server = new ApolloServer({
   context: ({ req }) => req.headers,
 });
 server.applyMiddleware({ app });
-
 db(dbUrl)
   .then(() => {
     app.set('config', config);
     app.set('pkg', pkg);
     app.use(cors());
-    // parse application/x-www-form-urlencoded
-    app.use(cors());
+    app.use(helmet());
+    // parse application/x-www-form-urlencoded;
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(authMiddleware(secret));
@@ -47,10 +45,7 @@ db(dbUrl)
         throw err;
       }
       app.use(errorHandler);
-      https.createServer({
-        key: fs.readFileSync('key.key'),
-        cert: fs.readFileSync('crt.crt'),
-      }, app).listen(port, () => {
+      app.listen(port, () => {
         console.info(`App listening on port ${port}`);
       });
     });
