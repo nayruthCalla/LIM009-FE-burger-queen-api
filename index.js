@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
 const cors = require('cors');
@@ -11,8 +13,10 @@ const routes = require('./routes');
 const pkg = require('./package.json');
 const db = require('./services/connection');
 
+
 const { dbUrl, port, secret } = config;
 const app = express();
+
 // TODO: Conección a la BD en mogodb
 const server = new ApolloServer({
   // These will be defined for both new or existing servers
@@ -43,7 +47,10 @@ db(dbUrl)
         throw err;
       }
       app.use(errorHandler);
-      app.listen(port, () => {
+      https.createServer({
+        key: fs.readFileSync('key.key'),
+        cert: fs.readFileSync('crt.crt'),
+      }, app).listen(port, () => {
         console.info(`App listening on port ${port}`);
       });
     });
