@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const { ApolloServer } = require('apollo-server-express');
 
 const cors = require('cors');
@@ -31,8 +32,8 @@ db(dbUrl)
     app.set('config', config);
     app.set('pkg', pkg);
     app.use(cors());
-    // parse application/x-www-form-urlencoded
-    app.use(cors());
+    app.use(helmet());
+    // parse application/x-www-form-urlencoded;
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(authMiddleware(secret));
