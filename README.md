@@ -3,10 +3,12 @@
 - **[API-REST](http://165.22.166.131:8080/)**
 ---
 ### `Cración de una orden`
+![Post/order](./img/apirest.png)
 
 
 - **[API-GRAPHQL](http://165.22.166.131:8080/graphql)**
 ### `Cración de una orden`
+![getorder](./img/graphql.png)
 ---
 ## 1. Preámbulo
 
@@ -63,7 +65,7 @@ implementar  la aplicación, qué parámetros esperan, qué deben responder, etc
 Este proyecto fue realizado en duos y se integró con el proyecto
 [Burger Queen API client](link) que se desarrolló simultáneamente con el equipo
 de Frontend developers.
--[Proyect Burger-queen](https://github.com/nayruthCalla/LIM009-FE-burger-queen-api/projects)
+- [Proyect Burger-queen](https://github.com/nayruthCalla/LIM009-FE-burger-queen-api/projects)
 ### Test de Integración
 Se realizarón **pruebas _end-to-end_**, para verificar el comportamiento desde el
 punto de vista de HTTP, desde afuera del servidor. Estos tests, a diferencia de
