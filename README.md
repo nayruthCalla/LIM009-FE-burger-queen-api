@@ -8,18 +8,6 @@
 - **[API-GRAPHQL](http://165.22.166.131:8080/graphql)
 ### `Cración de una orden`
 ---
-
-
-## Índice
-
-- [1. Preámbulo](#1-pre%C3%A1mbulo)
-- [2. Resumen del proyecto](#2-resumen-del-proyecto)
-- [3. Tecnologías Utilizadas](#3-Tecnologías Utilizadas)
-- [4. Consideraciones generales](#4-consideraciones-generales)
-- [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptaci%C3%B3n-m%C3%ADnimos-del-proyecto)
-- [6. Pistas, tips y lecturas complementarias](#6-pistas-tips-y-lecturas-complementarias)
-- [7 HTTP API Checklist](#7-http-api-checklist)
-
 ## 1. Preámbulo
 
 Un pequeño restaurante de hamburguesas, que está creciendo, necesita un
@@ -72,7 +60,6 @@ implementar  la aplicación, qué parámetros esperan, qué deben responder, etc
 * [Apollo-Server](https://www.apollographql.com)
 
 ## 4. Planificación del Proyecto
-
 Este proyecto fue realizado en duos y se integró con el proyecto
 [Burger Queen API client](link) que se desarrolló simultáneamente con el equipo
 de Frontend developers.
