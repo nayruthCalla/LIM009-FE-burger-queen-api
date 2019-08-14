@@ -1,15 +1,13 @@
-# Burger Queen - API con Node.js
+# Burger Queen - API con Node.js con Graphql
+---
+- **[API-REST](http://165.22.166.131:8080/)**
+---
+### `Cración de una orden`
 
-## Índice
 
-- [1. Preámbulo](#1-pre%C3%A1mbulo)
-- [2. Resumen del proyecto](#2-resumen-del-proyecto)
-- [3. Objetivos de aprendizaje](#3-objetivos-de-aprendizaje)
-- [4. Consideraciones generales](#4-consideraciones-generales)
-- [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptaci%C3%B3n-m%C3%ADnimos-del-proyecto)
-- [6. Pistas, tips y lecturas complementarias](#6-pistas-tips-y-lecturas-complementarias)
-- [7 HTTP API Checklist](#7-http-api-checklist)
-
+- **[API-GRAPHQL](http://165.22.166.131:8080/graphql)**
+### `Cración de una orden`
+---
 ## 1. Preámbulo
 
 Un pequeño restaurante de hamburguesas, que está creciendo, necesita un
@@ -50,63 +48,31 @@ que especifica el comportamiento esperado de la API que expondremos por
 HTTP.  Ahí puedes encontrar todos los detalles de qué _endpoints_ debe
 implementar  la aplicación, qué parámetros esperan, qué deben responder, etc.
 
-## 3. Objetivos de aprendizaje
+## 3. Tecnologías Utilizadas
+* [Express](https://expressjs.com/)
+* [MongoDB](https://www.mongodb.com/)
+* [docker](https://docs.docker.com/)
+* [docker compose](https://docs.docker.com/compose/)
+* [Postman](https://www.getpostman.com)
+* [Variable de entorno - Wikipedia](https://es.wikipedia.org/wiki/Variable_de_entorno)
+* [`process.env` - Node.js docs](https://nodejs.org/api/process.html#process_process_env)
+* [ssh](https://www.hostinger.es/tutoriales/que-es-ssh)
+* [Apollo-Server](https://www.apollographql.com)
 
-El objetivo principal de aprendizaje es adquirir experiencia con **Node.js**
-como herramienta para desarrollar _aplicaciones de servidor_, junto con una
-serie de herramientas comunes usadas en este tipo de contexto (Express como
-framework, MongoDB o MySQL como base datos, contenedores de docker, servidores
-virtuales, etc).
-
-En este proyecto tendrás que construir un servidor web que debe _servir_ `JSON`
-sobre `HTTP`, y desplegarlo en un servidor en la nube.
-
-Para completar el proyecto tendrás que familiarizarte con conceptos como
-**rutas** (_routes_), **URLs**, **HTTP** y **REST** (verbs, request, response, headers,
-body, status codes...), **JSON**, **JWT** (_JSON Web Tokens_), **conexión con
-una base datos** (`MongoDB` o `MySQL`), **variables de entorno**, **deployment**,
-**contenedores de `docker`**...
-
-## 4. Consideraciones generales
-
-Este proyecto se realizará en duos y deberá integrarse con el proyecto
-[Burger Queen API client](link) que desarrolle simultáneamente el quipo
-de Frontend developers de tu squad.
-
-La lógica del proyecto debe estar implementada completamente en JavaScript (ES6).
-En este proyecto está permitido usar librerías o frameworks, asi como
-extensiones al lenguaje con `babel` (caso en el cual deberás incluir un
-comando `npm build`).
-
-Los tests deben cubrir un mínimo del 90% de _statements_, _functions_,
-_lines_ y _branches_. Si bien el boilerplate no incluye la configuración para
-pruebas unitarias, estas son obligatorias.
-
-Otro requerimiento del equipo de QA de nuestra clienta es realizar
-**pruebas _end-to-end_**, que usaremos para verificar el comportamiento desde el
+## 4. Planificación del Proyecto
+Este proyecto fue realizado en duos y se integró con el proyecto
+[Burger Queen API client](link) que se desarrolló simultáneamente con el equipo
+de Frontend developers.
+-[Proyect Burger-queen](https://github.com/nayruthCalla/LIM009-FE-burger-queen-api/projects)
+### Test de Integración
+Se realizarón **pruebas _end-to-end_**, para verificar el comportamiento desde el
 punto de vista de HTTP, desde afuera del servidor. Estos tests, a diferencia de
 las pruebas unitarias, no prueban cada pieza por separado sino que prueban la
 aplicación completa, de principio a fin. Estas pruebas, al no hacer uso directo
 del código fuente de la aplicación, pueden ejecutarse directamente sobre una URL
 remota, ya que la interfaz sometida a pruebas es HTTP.
 
-El _boilerplate_ ya contiene el setup y configuración
-necesaria para ejecutar todos los tests _end-to-end_ con el comando `npm run test:e2e`.
-
-```sh
-# Corre pruebas e2e sobre instancia local. Esto levanta la aplicación con npm
-# start y corre los tests contra la URL de esta instancia (por defecto
-# http://127.0.0.1:8080).
-npm run test:e2e
-
-# Corre pruebas e2e sobre URL remota
-REMOTE_URL=<TODO: poner URL> npm run test:e2e
-```
-
-Las pruebas _end-to-end_ ya están completas en el _boilerplate_, así que puedes
-usarlas como guía de implementación y checklist de completitud.
-
-## 5. Criterios de aceptación mínimos del proyecto
+## 5. Criterios del proyecto
 
 ### 5.1 API
 
