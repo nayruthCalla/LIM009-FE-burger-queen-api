@@ -12,8 +12,10 @@ const routes = require('./routes');
 const pkg = require('./package.json');
 const db = require('./services/connection');
 
+
 const { dbUrl, port, secret } = config;
 const app = express();
+
 // TODO: Conección a la BD en mogodb
 const server = new ApolloServer({
   // These will be defined for both new or existing servers

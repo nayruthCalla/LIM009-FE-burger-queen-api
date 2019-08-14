@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const { ApolloError } = require('apollo-server');
 
-const baseURL = 'http://165.22.166.131:8080/';
+const baseURL = 'http://localhost:8080/';
 const resolvers = {
   Mutation: {
     authentication: async (parent, { email, password }) => {

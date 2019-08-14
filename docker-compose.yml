@@ -4,7 +4,7 @@ services:
     image: mongo:4
     restart: always 
     expose:
-      - "27017"
+      - "27017" 
     networks:
       - private
   node:
